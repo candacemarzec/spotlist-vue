@@ -13,7 +13,11 @@
     <button v-on:click="destroyUser()">Delete Account</button><br>
     <button v-on:click="createHousehold()">Create a Household</button><br>
       
-    
+    <div v-if="user.household">
+      <h1>My Household</h1>  
+      <p>Household Name: {{ user.household.name }}</p>
+      <button v-on:click="'/households/' + household.id + '/edit'">Edit</button><br>
+      <button v-on:click="destroyHousehold()">Delete</button><br>
     <!-- show other members here -->
 
 
