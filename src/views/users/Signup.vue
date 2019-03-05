@@ -26,7 +26,7 @@
           <label>Password confirmation:</label>
           <input type="password" class="form-control" v-model="passwordConfirmation">
         </div>
-        <input type="submit" class="btn btn-primary" value="Create Account">
+        <input type="submit" class="btn btn-primary" value="Create Account">  
       </form>
     </div>
   </div>
@@ -46,6 +46,7 @@ export default {
       errors: []
     };
   },
+
   methods: {
     submit: function() {
       var params = {
@@ -62,6 +63,9 @@ export default {
         })
         .catch(error => {
           this.errors = error.response.data.errors;
+          // this.errors = ["Invalid email or password."];
+          // this.email = "";
+          // this.password = "";
         });
     }
   }

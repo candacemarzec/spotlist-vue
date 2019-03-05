@@ -9,21 +9,37 @@
     <p>Email: {{ user.email }}</p>
     <!-- <p>Password: {{ user.Password }}</p> -->
 
-    <button v-on:click="'/users/' + user.id + '/edit'">Edit</button><br>
+    <button v-bind:to="'/users/' + user.id + '/edit'">Edit</button><br>
     <button v-on:click="destroyUser()">Delete Account</button><br>
-    <button v-on:click="createHousehold()">Create a Household</button><br>
+    
       
     <div v-if="user.household">
-      <h1>My Household</h1>  
-      <p>Household Name: {{ user.household.name }}</p>
-      <button v-on:click="'/households/' + household.id + '/edit'">Edit</button><br>
-      <button v-on:click="destroyHousehold()">Delete</button><br>
+      <h2><router-link v-bind:to="'/households/' + user.household.id">My Household</router-link><br></h2>  
+        <p>Household Name: {{ user.household.name }}</p>
+    </div>
+
+        <!-- Household Create -->
+      <div v-if="!user.household">
+        <form v-on:submit.prevent="createHousehold()">
+          <h1>New Household</h1>
+          <ul>
+            <li class="text-danger" v-for="error in errors">{{ error }}</li>
+          </ul>
+          <div class="form-group">
+            <label>Name:</label> 
+            <input type="text" class="form-control" v-model="name">
+          </div>
+          <input type="submit" class="btn btn-primary" value="Submit">
+        </form>
+      </div>
+
+          <button v-on:click="'/households/' + household.id + '/edit'">Edit</button><br>
+          <button v-on:click="destroyHousehold()">Delete</button><br>
     <!-- show other members here -->
 
 
-
+      
     </div>
-  </div>
 </template>
 
 
@@ -68,7 +84,42 @@ export default {
         console.log("Success!", response.data);
         this.$router.push("/");
       });
+    },
+    // Household Methods
+
+    createHousehold: function() {
+      var householdParams = {
+        name: this.newHouseholdName
+      };
+      axios.post("/api/households", householdParams).then(response => {
+        this.household = response.data;
+        this.newHouseholdName = "";
+      });
     }
+
+    // editHousehold: function() {
+    //   var householdParams = {
+    //     name: this.household.name
+    //   };
+
+    //   axios
+    //     .patch("/api/households/" + this.household.id, householdParams)
+    //     .then(response => {
+    //       console.log("Success!", response.data);
+    //       this.$router.push("/households/" + this.household.id);
+    //     })
+    //     .catch(error => {
+    //       this.errors = error.response.data.errors;
+    //       this.status = error.response.status;
+    //     });
+    // },
+
+    // destroyHousehold: function() {
+    //   axios.delete("/api/households/" + this.household.id).then(response => {
+    //     console.log("Success!", response.data);
+    //     this.$router.push("/");
+    //   });
+    // }
   }
 };
 </script>
