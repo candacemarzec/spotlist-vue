@@ -14,7 +14,8 @@
           <label>Password:</label>
           <input type="password" class="form-control" v-model="password">
         </div>
-        <input type="submit" class="btn btn-primary" value="Submit">
+        <input type="submit" class="btn btn-primary" value="Login">
+        <!-- <button v-bind:to="'/users/' + user.id">Login</button> -->
       </form>
     </div>
   </div>
@@ -42,7 +43,8 @@ export default {
         .then(response => {
           axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.jwt;
           localStorage.setItem("jwt", response.data.jwt);
-          this.$router.push("/");
+          console.log(response.data);
+          this.$router.push("/users/me");
         })
         .catch(error => {
           this.errors = ["Invalid email or password."];

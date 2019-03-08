@@ -6,8 +6,11 @@ import Signup from './views/users/Signup.vue';
 import Login from './views/Login.vue';
 import Logout from './views/Logout.vue';
 import Profile from './views/users/Profile.vue';
+
 import Homepage from './views/households/Homepage.vue';
-// import HomePage from './views/lists/Homepage.vue';
+import HomePage from './views/lists/HomePage.vue';
+
+
 
 Vue.use(Router);
 
@@ -46,9 +49,14 @@ export default new Router({
       component: Profile
     },
     {
-      path: '/households/:id',
+      path: '/household',
       name: 'homepage',
       component: Homepage
+    },
+    {
+      path: '/lists',
+      name: 'list-homepage',
+      component: HomePage
     }
   ]
 });

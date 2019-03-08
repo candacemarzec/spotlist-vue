@@ -8,33 +8,67 @@
     <p>Last Name: {{ user.last_name }}</p>
     <p>Email: {{ user.email }}</p>
     <!-- <p>Password: {{ user.Password }}</p> -->
-
-    <button v-bind:to="'/users/' + user.id + '/edit'">Edit</button><br>
-    <button v-on:click="destroyUser()">Delete Account</button><br>
-    
       
+      <div>
+        <form v-on:submit.prevent="updateUser()">
+            <h2>Edit Profile</h2>
+            <ul>
+              <li class="text-danger" v-for="error in errors">{{ error }}</li>
+            </ul>
+            <div class="form-group">
+              <label>Name: </label> 
+              <input type="text" class="form-control" v-model="user.first_name">
+              <input type="text" class="form-control" v-model="user.last_name">
+              <input type="text" class="form-control" v-model="user.email">
+             <!--  <input type="text" class="form-control" v-model="user.password"> -->
+            </div>
+            <button v-bind:to="'/users/' + user.id + '/edit'">Update</button><br>
+          </form>
+      </div>
+      <button v-on:click="destroyUser()">Delete Account</button><br>
+    
+
+
+    
+
+    <!-- User with household   -->
     <div v-if="user.household">
-      <h2><router-link v-bind:to="'/households/' + user.household.id">My Household</router-link><br></h2>  
+      <h2><router-link to="/household">My Household</router-link><br></h2>  
         <p>Household Name: {{ user.household.name }}</p>
+
+      <div>
+        <form v-on:submit.prevent="updateHousehold()">
+            <h2>Edit Household</h2>
+            <ul>
+              <li class="text-danger" v-for="error in errors">{{ error }}</li>
+            </ul>
+            <div class="form-group">
+              <label>Name:</label> 
+              <input type="text" class="form-control" v-model="user.household.name">
+            </div>
+            <input type="submit" class="btn btn-primary" value="Update">
+          </form>
+      </div>
+    </div>
+    
+
+        <!-- User without household -->
+    <div v-if="!user.household">
+      <form v-on:submit.prevent="createHousehold()">
+        <h1>New Household</h1>
+        <ul>
+          <li class="text-danger" v-for="error in errors">{{ error }}</li>
+        </ul>
+        <div class="form-group">
+          <label>Name: </label> 
+          <input type="text" class="form-control" v-model="newHouseholdName">
+        </div>
+        <input type="submit" class="btn btn-primary" value="Create">
+      </form>
     </div>
 
-        <!-- Household Create -->
-      <div v-if="!user.household">
-        <form v-on:submit.prevent="createHousehold()">
-          <h1>New Household</h1>
-          <ul>
-            <li class="text-danger" v-for="error in errors">{{ error }}</li>
-          </ul>
-          <div class="form-group">
-            <label>Name:</label> 
-            <input type="text" class="form-control" v-model="name">
-          </div>
-          <input type="submit" class="btn btn-primary" value="Submit">
-        </form>
-      </div>
 
-          <button v-on:click="'/households/' + household.id + '/edit'">Edit</button><br>
-          <button v-on:click="destroyHousehold()">Delete</button><br>
+    <button v-on:click="destroyHousehold()">Delete</button><br>
     <!-- show other members here -->
 
 
@@ -50,17 +84,19 @@ export default {
   data: function() {
     return {
       user: {},
+      household: {},
+      newHouseholdName: "",
       errors: []
     };
   },
   created: function() {
-    axios.get("/api/users/" + this.$route.params.id).then(response => {
+    axios.get("/api/users/me").then(response => {
       console.log(response.data);
       this.user = response.data;
     });
   },
   methods: {
-    submit: function() {
+    updateUser: function() {
       var userParams = {
         first_name: this.user.first_name,
         last_name: this.user.last_name,
@@ -95,24 +131,24 @@ export default {
         this.household = response.data;
         this.newHouseholdName = "";
       });
+    },
+
+    updateHousehold: function() {
+      var householdParams = {
+        name: this.household.name
+      };
+
+      axios
+        .patch("/api/households/" + this.household.id, householdParams)
+        .then(response => {
+          console.log("Success!", response.data);
+          this.$router.push("/users/" + this.user.id);
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
+          this.status = error.response.status;
+        });
     }
-
-    // editHousehold: function() {
-    //   var householdParams = {
-    //     name: this.household.name
-    //   };
-
-    //   axios
-    //     .patch("/api/households/" + this.household.id, householdParams)
-    //     .then(response => {
-    //       console.log("Success!", response.data);
-    //       this.$router.push("/households/" + this.household.id);
-    //     })
-    //     .catch(error => {
-    //       this.errors = error.response.data.errors;
-    //       this.status = error.response.status;
-    //     });
-    // },
 
     // destroyHousehold: function() {
     //   axios.delete("/api/households/" + this.household.id).then(response => {

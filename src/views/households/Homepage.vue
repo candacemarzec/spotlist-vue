@@ -4,11 +4,8 @@
   <h1>Spotlist</h1>  
 
   <h2>Household Name: {{ household.name }}</h2>
-
     
-    <button v-on:click="'/households/' + household.id + '/edit'">Edit</button><br>
-    
-    
+  
   <div v-for="list in household.lists">
     <h2>{{ list.store_name }}</h2>
     <p>Notes: {{ list.notes }}</p>
@@ -16,10 +13,45 @@
         <h2>{{ item.name }}</h2>
     </div>    
   </div>
-  
-    <button v-on:click="createList()">New List</button><br>
-    <button v-on:click="'/lists/' + list.id + '/edit'">Edit List</button><br>
-    <button v-on:click="destroyList()">Delete List</button><br>
+
+
+  <!-- List Actions   -->
+  <div>
+    <form v-on:submit.prevent="createList()">
+      <h2>New List</h2>
+      <ul>
+        <li class="text-danger" v-for="error in errors">{{ error }}</li>
+      </ul>
+      <div class="form-group">
+        <label>Store Name: </label> 
+        <input type="text" class="form-control" v-model="newListStoreName"><br>
+        <label>Notes: </label>
+        <textarea v-model="newListNotes"></textarea>
+      </div>
+      <button v-bind:to="'/lists/new'">Create</button><br>
+    </form>
+  </div>
+
+
+  <div v-for="list in household.lists">
+    <form v-on:submit.prevent="updateList()">
+        <h2>Edit List</h2>
+        <ul>
+          <li class="text-danger" v-for="error in errors">{{ error }}</li>
+        </ul>
+        <div class="form-group">
+          <label>Store Name: </label> 
+          <input type="text" class="form-control" v-model="list.store_name"><br>
+          <label>Notes: </label>
+          <textarea v-model="list.notes"></textarea> 
+        </div>
+        <button v-bind:to="'/lists/' + list.id + '/edit'">Update</button><br>
+      </form>
+      <button v-on:click="destroyList()">Delete List</button><br>
+  </div>
+
+
+        
 
 
   </div>
@@ -39,7 +71,7 @@ export default {
     };
   },
   created: function() {
-    axios.get("/api/households/" + this.$route.params.id).then(response => {
+    axios.get("/api/household").then(response => {
       console.log(response.data);
       this.household = response.data;
     });
@@ -69,13 +101,12 @@ export default {
         notes: this.newListNotes
       };
       axios.post("/api/lists", listParams).then(response => {
-        this.lists.push(response.data);
-        this.newListNotes = "";
-        this.newListStoreName = "";
+        console.log("Success!", response.data);
+        this.$router.push("/households/" + this.household.id);
       });
     },
 
-    editList: function() {
+    updateList: function(list) {
       var listParams = {
         store_name: this.list.store_name,
         notes: this.list.notes
