@@ -5,14 +5,6 @@
 
   <h2>Household Name: {{ household.name }}</h2>
     
-  
-  <div v-for="list in household.lists">
-    <h2>{{ list.store_name }}</h2>
-    <p>Notes: {{ list.notes }}</p>
-    <div v-for="item in list.items">
-        <h2>{{ item.name }}</h2>
-    </div>    
-  </div>
 
 
   <!-- List Actions   -->
@@ -26,33 +18,94 @@
         <label>Store Name: </label> 
         <input type="text" class="form-control" v-model="newListStoreName"><br>
         <label>Notes: </label>
-        <textarea v-model="newListNotes"></textarea>
+        <textarea v-model="newListNotes"></textarea><br>
       </div>
-      <button v-bind:to="'/lists/new'">Create</button><br>
+      <button v-bind:to="'/lists/new'">Add New List</button><br>
     </form>
-  </div>
+  </div>  
+
 
 
   <div v-for="list in household.lists">
-    <form v-on:submit.prevent="updateList()">
+    <h2>{{ list.store_name }}</h2>
+    <p>Notes: {{ list.notes }}</p>
+    <div v-for="item in list.items">
+        <p>{{ item.name }}</p>
+        <p>{{ item.coupon_url }}</p>
+        <p>{{ item.image_url }}</p>
+        <p>{{ item.need_by_date }}</p>
+   
+
+      <form v-on:submit.prevent="updateList(list)">
         <h2>Edit List</h2>
         <ul>
           <li class="text-danger" v-for="error in errors">{{ error }}</li>
         </ul>
         <div class="form-group">
-          <label>Store Name: </label> 
+          <label>Store Name: </label>
           <input type="text" class="form-control" v-model="list.store_name"><br>
           <label>Notes: </label>
-          <textarea v-model="list.notes"></textarea> 
+          <textarea class="form-control" v-model="list.notes"></textarea><br> 
+          <button v-bind:to="'/lists/' + list.id + '/edit'">Update List</button><br>
+          <button v-on:click="destroyList(list)">Delete List</button><br> 
         </div>
-        <button v-bind:to="'/lists/' + list.id + '/edit'">Update</button><br>
-      </form>
-      <button v-on:click="destroyList()">Delete List</button><br>
-  </div>
 
 
+        <div>
+          <form v-on:submit.prevent="createItem(list)">
+            <h2>New Item</h2>
+            <ul>
+              <li class="text-danger" v-for="error in errors">{{ error }}</li>
+            </ul>
+            <div class="form-group">
+              <label>Name: </label>
+              <input type="text" class="form-control" v-model="newItemName"><br>
+              <label>Coupon: </label>
+              <input type="text" class="form-control" v-model="newItemCouponUrl"><br>
+              <label>Image: </label>
+              <input type="text" class="form-control" v-model="newItemImageUrl"><br>
+              <label>Need by: </label>
+              <input type="text" class="form-control" v-model="newItemNeedByDate"><br>
+              <button v-bind:to="'/items/new'">Add New Item</button><br>
+            </div> 
+
+            <div>
+              <form v-on:submit.prevent="updateItem(item)">
+                  <h2>Edit Item</h2>
+                  <ul>
+                    <li class="text-danger" v-for="error in errors">{{ error }}</li>
+                  </ul>
+                  <div class="form-group">
+                    <label>Name: </label>
+                    <input type="text" class="form-control" v-model="item.name"><br>
+                    <label>Coupon: </label>
+                    <input type="text" class="form-control" v-model="item.coupon_url"><br>
+                    <label>Image: </label> 
+                    <input type="text" class="form-control" v-model="item.image_url"><br> 
+                    <label>Need by: </label> 
+                    <input type="text" class="form-control" v-model="item.need_by_date"><br> 
+                  <button v-bind:to="'/items/' + item.id + '/edit'">Update Item</button><br>
+                  </div>
+                  <button v-on:click="destroyItem(item)">Delete Item</button><br>
+              </form> 
+            
+             </div> 
+          
+        </form>
+      </div> 
+
+      
         
+      </form>
+    </div>
+        
+   </div>
+    
 
+  <!-- Items Methods -->
+
+ 
+  
 
   </div>
 </template>
@@ -65,8 +118,14 @@ export default {
   data: function() {
     return {
       household: {},
+      list: {},
+      item: {},
       newListStoreName: "",
       newListNotes: "",
+      newItemName: "",
+      newItemCouponUrl: "",
+      newItemImageUrl: "",
+      newItemNeedByDate: "",
       errors: []
     };
   },
@@ -100,22 +159,11 @@ export default {
         store_name: this.newListStoreName,
         notes: this.newListNotes
       };
-      axios.post("/api/lists", listParams).then(response => {
-        console.log("Success!", response.data);
-        this.$router.push("/households/" + this.household.id);
-      });
-    },
-
-    updateList: function(list) {
-      var listParams = {
-        store_name: this.list.store_name,
-        notes: this.list.notes
-      };
       axios
-        .patch("/api/lists/" + this.list.id, listParams)
+        .post("/api/lists", listParams)
         .then(response => {
           console.log("Success!", response.data);
-          this.$router.push("/lists/" + this.list.id);
+          this.$router.push("/household");
         })
         .catch(error => {
           this.errors = error.response.data.errors;
@@ -123,14 +171,76 @@ export default {
         });
     },
 
-    destroyList: function() {
-      axios.delete("/api/lists/" + this.list.id).then(response => {
+    updateList: function(list) {
+      console.log(list);
+      var listParams = {
+        store_name: list.store_name,
+        notes: list.notes
+      };
+      axios
+        .patch("/api/lists/" + list.id, listParams)
+        .then(response => {
+          console.log("Success!", response.data);
+          this.$router.push("/household");
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
+          this.status = error.response.status;
+        });
+    },
+
+    destroyList: function(list) {
+      axios.delete("/api/lists/" + list.id).then(response => {
         console.log("Success!", response.data);
-        this.$router.push("/");
+        this.$router.push("/household");
       });
-    }
+    },
 
     // Item Methods
+    createItem: function(list) {
+      var itemParams = {
+        name: this.newItemName,
+        coupon_url: this.newItemCouponUrl,
+        image_url: this.newItemImageUrl,
+        need_by_date: this.newItemNeedByDate,
+        list_id: list.id
+      };
+      axios
+        .post("/api/items", itemParams)
+        .then(response => {
+          console.log("Success!", response.data);
+          list.items.push(response.data);
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
+          this.status = error.response.status;
+        });
+    },
+
+    updateItem: function(item) {
+      var itemParams = {
+        name: item.name,
+        coupon_url: item.coupon_url,
+        image_url: item.image_url,
+        need_by_date: item.need_by_date
+      };
+      axios
+        .patch("/api/items/" + item.id, itemParams)
+        .then(response => {
+          console.log("Success!", response.data);
+          this.$router.push("/household");
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
+          this.status = error.response.status;
+        });
+    },
+    destroyItem: function(item) {
+      axios.delete("/api/items/" + item.id).then(response => {
+        console.log("Success!", response.data);
+        this.$router.push(response.data);
+      });
+    }
   }
 };
 </script>

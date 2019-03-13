@@ -33,7 +33,7 @@
 
     <!-- User with household   -->
     <div v-if="user.household">
-      <h2><router-link to="/household">My Household</router-link><br></h2>  
+      <h2><router-link to="/household">My Household</router-link></h2> 
         <p>Household Name: {{ user.household.name }}</p>
 
       <div>
@@ -43,16 +43,18 @@
               <li class="text-danger" v-for="error in errors">{{ error }}</li>
             </ul>
             <div class="form-group">
-              <label>Name:</label> 
-              <input type="text" class="form-control" v-model="user.household.name">
+              <label>Name: </label> 
+              <input type="text" class="form-control" v-model="household.name">
             </div>
-            <input type="submit" class="btn btn-primary" value="Update">
+            <button v-bind:to="'/households/' + household.id + '/edit'">Update</button><br>
+            <!-- show other members here -->
           </form>
       </div>
+     <button v-on:click="destroyHousehold()">Delete</button><br>
     </div>
     
 
-        <!-- User without household -->
+    <!-- User without household -->
     <div v-if="!user.household">
       <form v-on:submit.prevent="createHousehold()">
         <h1>New Household</h1>
@@ -68,8 +70,8 @@
     </div>
 
 
-    <button v-on:click="destroyHousehold()">Delete</button><br>
-    <!-- show other members here -->
+   
+    
 
 
       
@@ -105,7 +107,7 @@ export default {
       };
 
       axios
-        .patch("/api/users/" + this.user.id, userParams)
+        .patch("/api/users/me", userParams)
         .then(response => {
           console.log("Success!", response.data);
           this.$router.push("/users/" + this.user.id);
@@ -116,7 +118,7 @@ export default {
         });
     },
     destroyUser: function() {
-      axios.delete("/api/users/" + this.user.id).then(response => {
+      axios.delete("/api/users/me").then(response => {
         console.log("Success!", response.data);
         this.$router.push("/");
       });
@@ -148,14 +150,14 @@ export default {
           this.errors = error.response.data.errors;
           this.status = error.response.status;
         });
-    }
+    },
 
-    // destroyHousehold: function() {
-    //   axios.delete("/api/households/" + this.household.id).then(response => {
-    //     console.log("Success!", response.data);
-    //     this.$router.push("/");
-    //   });
-    // }
+    destroyHousehold: function() {
+      axios.delete("/api/households/" + this.household.id).then(response => {
+        console.log("Success!", response.data);
+        this.$router.push("/users/" + this.user.id);
+      });
+    }
   }
 };
 </script>
