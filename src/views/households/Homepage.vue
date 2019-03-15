@@ -1,40 +1,36 @@
 <template>
   <div class="households-homepage">
 
-  <h1>Spotlist</h1>  
+    <h1>Spotlist</h1>  
 
-  <h2>Household Name: {{ household.name }}</h2>
+    <h2>Household Name: {{ household.name }}</h2>
     
 
 
-  <!-- List Actions   -->
-  <div>
-    <form v-on:submit.prevent="createList()">
-      <h2>New List</h2>
-      <ul>
-        <li class="text-danger" v-for="error in errors">{{ error }}</li>
-      </ul>
-      <div class="form-group">
-        <label>Store Name: </label> 
-        <input type="text" class="form-control" v-model="newListStoreName"><br>
-        <label>Notes: </label>
-        <textarea v-model="newListNotes"></textarea><br>
-      </div>
-      <button v-bind:to="'/lists/new'">Add New List</button><br>
-    </form>
-  </div>  
+    <!-- List Actions   -->
+    <div>
+      <form v-on:submit.prevent="createList()">
+        <h2>New List</h2>
+        <ul>
+          <li class="text-danger" v-for="error in errors">{{ error }}</li>
+        </ul>
+        <div class="form-group">
+          <label>Store Name: </label> 
+          <input type="text" class="form-control" v-model="newListStoreName"><br>
+          <label>Notes: </label>
+          <textarea v-model="newListNotes"></textarea><br>
+        </div>
+        <input type="submit" value="Add List">
+      </form>
+    </div>  
 
 
 
-  <div v-for="list in household.lists">
-    <h2>{{ list.store_name }}</h2>
-    <p>Notes: {{ list.notes }}</p>
-    <div v-for="item in list.items">
-        <p>{{ item.name }}</p>
-        <p>{{ item.coupon_url }}</p>
-        <p>{{ item.image_url }}</p>
-        <p>{{ item.need_by_date }}</p>
-   
+    <div v-for="list in household.lists">
+      <h2>{{ list.store_name }}</h2>
+      <p>Notes: {{ list.notes }}</p>
+
+
 
       <form v-on:submit.prevent="updateList(list)">
         <h2>Edit List</h2>
@@ -46,66 +42,68 @@
           <input type="text" class="form-control" v-model="list.store_name"><br>
           <label>Notes: </label>
           <textarea class="form-control" v-model="list.notes"></textarea><br> 
-          <button v-bind:to="'/lists/' + list.id + '/edit'">Update List</button><br>
-          <button v-on:click="destroyList(list)">Delete List</button><br> 
+          <input type="submit" value="Update List">        
+        </div>
+      </form>
+
+      <button v-on:click="destroyList(list)">Delete List</button><br>  
+
+
+      <div>
+        <form v-on:submit.prevent="createItem(list)">
+          <h2>New Item</h2>
+          <ul>
+            <li class="text-danger" v-for="error in errors">{{ error }}</li>
+          </ul>
+          <div class="form-group">
+            <label>Name: </label>
+            <input type="text" class="form-control" v-model="newItemName"><br>
+            <label>Coupon: </label>
+            <input type="text" class="form-control" v-model="newItemCouponUrl"><br>
+            <label>Image: </label>
+            <input type="text" class="form-control" v-model="newItemImageUrl"><br>
+            <label>Need by: </label>
+            <input type="text" class="form-control" v-model="newItemNeedByDate"><br>
+            <input type="submit" value="Add New Item">
+          </div> 
+
+        </form>
+
+
+        <div v-for="item in list.items">
+          <p>{{ item.name }}</p>
+          <p>{{ item.coupon_url }}</p>
+          <p>{{ item.image_url }}</p>
+          <p>{{ item.need_by_date }}</p>
+
+
+          <div>
+            <form v-on:submit.prevent="updateItem(item)">
+              <h2>Edit Item</h2>
+              <ul>
+                <li class="text-danger" v-for="error in errors">{{ error }}</li>
+              </ul>
+              <div class="form-group">
+                <label>Name: </label>
+                <input type="text" class="form-control" v-model="item.name"><br>
+                <label>Coupon: </label>
+                <input type="text" class="form-control" v-model="item.coupon_url"><br>
+                <label>Image: </label> 
+                <input type="text" class="form-control" v-model="item.image_url"><br> 
+                <label>Need by: </label> 
+                <input type="text" class="form-control" v-model="item.need_by_date"><br> 
+                <input type="submit" value="Edit Item">
+              </div>
+              
+            </form> 
+            <button v-on:click="destroyItem(item, list)">Delete Item</button><br> 
+          </div>
         </div>
 
 
-        <div>
-          <form v-on:submit.prevent="createItem(list)">
-            <h2>New Item</h2>
-            <ul>
-              <li class="text-danger" v-for="error in errors">{{ error }}</li>
-            </ul>
-            <div class="form-group">
-              <label>Name: </label>
-              <input type="text" class="form-control" v-model="newItemName"><br>
-              <label>Coupon: </label>
-              <input type="text" class="form-control" v-model="newItemCouponUrl"><br>
-              <label>Image: </label>
-              <input type="text" class="form-control" v-model="newItemImageUrl"><br>
-              <label>Need by: </label>
-              <input type="text" class="form-control" v-model="newItemNeedByDate"><br>
-              <button v-bind:to="'/items/new'">Add New Item</button><br>
-            </div> 
-
-            <div>
-              <form v-on:submit.prevent="updateItem(item)">
-                  <h2>Edit Item</h2>
-                  <ul>
-                    <li class="text-danger" v-for="error in errors">{{ error }}</li>
-                  </ul>
-                  <div class="form-group">
-                    <label>Name: </label>
-                    <input type="text" class="form-control" v-model="item.name"><br>
-                    <label>Coupon: </label>
-                    <input type="text" class="form-control" v-model="item.coupon_url"><br>
-                    <label>Image: </label> 
-                    <input type="text" class="form-control" v-model="item.image_url"><br> 
-                    <label>Need by: </label> 
-                    <input type="text" class="form-control" v-model="item.need_by_date"><br> 
-                  <button v-bind:to="'/items/' + item.id + '/edit'">Update Item</button><br>
-                  </div>
-                  <button v-on:click="destroyItem(item)">Delete Item</button><br>
-              </form> 
-            
-             </div> 
-          
-        </form>
-      </div> 
-
-      
         
-      </form>
+      </div>      
     </div>
-        
-   </div>
-    
-
-  <!-- Items Methods -->
-
- 
-  
 
   </div>
 </template>
@@ -118,8 +116,6 @@ export default {
   data: function() {
     return {
       household: {},
-      list: {},
-      item: {},
       newListStoreName: "",
       newListNotes: "",
       newItemName: "",
@@ -163,7 +159,7 @@ export default {
         .post("/api/lists", listParams)
         .then(response => {
           console.log("Success!", response.data);
-          this.$router.push("/household");
+          this.household.lists.push(response.data);
         })
         .catch(error => {
           this.errors = error.response.data.errors;
@@ -192,7 +188,8 @@ export default {
     destroyList: function(list) {
       axios.delete("/api/lists/" + list.id).then(response => {
         console.log("Success!", response.data);
-        this.$router.push("/household");
+        var index = this.household.lists.indexOf(list);
+        this.household.lists.splice(index, 1);
       });
     },
 
@@ -228,17 +225,17 @@ export default {
         .patch("/api/items/" + item.id, itemParams)
         .then(response => {
           console.log("Success!", response.data);
-          this.$router.push("/household");
         })
         .catch(error => {
           this.errors = error.response.data.errors;
           this.status = error.response.status;
         });
     },
-    destroyItem: function(item) {
+    destroyItem: function(item, list) {
       axios.delete("/api/items/" + item.id).then(response => {
         console.log("Success!", response.data);
-        this.$router.push(response.data);
+        var index = list.items.indexOf(item);
+        list.items.splice(index, 1);
       });
     }
   }

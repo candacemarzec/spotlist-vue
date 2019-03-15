@@ -67,6 +67,7 @@
         </div>
         <input type="submit" class="btn btn-primary" value="Create">
       </form>
+      <h2><router-link to="/lists">My Lists</router-link></h2>
     </div>
 
 
