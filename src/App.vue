@@ -37,8 +37,8 @@
             <li class="nav-item" v-if="!isLoggedIn()" data-toggle="modal" data-target="#loginModal">
               <a class="nav-link">Login</a>
             </li>
-            <li class="nav-item" v-if="!isLoggedIn()">
-              <a class="nav-link nav-link--rounded" href="/users/new">Signup</a>
+            <li class="nav-item" v-if="!isLoggedIn()" data-toggle="modal" data-target="#signupModal">
+              <a class="nav-link nav-link--rounded">Signup</a>
             </li>
 
           </ul>
@@ -46,7 +46,7 @@
       </div>
     </nav>
 
-    <div class="pt-100">
+    <div class="pt-75">
       <router-view/>
     </div>
 
@@ -86,7 +86,7 @@
 
 
 
-    <!-- Modal -->
+    <!-- Login Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -103,7 +103,7 @@
                     <ul>
                       <li class="text-danger" v-for="error in errors">{{ error }}</li>
                     </ul>
-                    <form class="ecommerce-sign-up-form" v-on:submit.prevent="submit()">
+                    <form class="ecommerce-sign-up-form" v-on:submit.prevent="login()">
                       <h1>
                         Log in to your account
                       </h1>
@@ -123,10 +123,6 @@
                       <div class="form-action">
                         <button type="submit" class="btn-shadow btn-shadow-dark">Sign in</button>
                       </div>
-                      <div class="form-bottom">
-                        <a href="sign-up.html" class="btn-forgot-password">Forgot your password?</a>
-                        Don't have an account yet? <a href="/users/me">Sign up</a>
-                      </div>
                     </form>
                   </div>
                 </div>
@@ -138,12 +134,60 @@
     </div>
 
 
+
+    <!-- Signup Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form class="ecommerce-sign-up-form" v-on:submit.prevent="signup()">
+              <h1>
+                Create your account
+              </h1>
+              <div class="form-group">
+                <label>First name</label>
+                <input type="text" class="form-control" v-model="first_name">
+              </div>
+              <div class="form-group">
+                <label>Last name</label>
+                <input type="text" class="form-control" v-model="last_name">
+              </div>
+              <div class="form-group">
+                <label>Email address</label>
+                <input type="email" class="form-control" v-model="email">
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" v-model="password">
+              </div>
+              <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" class="form-control" v-model="passwordConfirmation">
+              </div>
+              <div class="form-action">
+                <button type="submit" class="btn-shadow btn-shadow-dark">Create account</button>
+              </div>
+              <div class="form-bottom">
+                Already have an account? <a href="/login">Sign in</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </template>
 
 <style>
-.pt-100 {
-  padding-top: 100px;
+.pt-75 {
+  padding-top: 75px;
 }
 </style>
 
@@ -154,8 +198,11 @@ import axios from "axios";
 export default {
   data: function() {
     return {
+      first_name: "",
+      last_name: "",
       email: "",
       password: "",
+      passwordConfirmation: "",
       errors: []
     };
   },
@@ -163,7 +210,7 @@ export default {
     isLoggedIn: function() {
       return localStorage.getItem("jwt");
     },
-    submit: function() {
+    login: function() {
       var params = {
         email: this.email,
         password: this.password
@@ -181,6 +228,27 @@ export default {
           this.errors = ["Invalid email or password."];
           this.email = "";
           this.password = "";
+        });
+    },
+    signup: function() {
+      var params = {
+        first_name: this.first_name,
+        last_name: this.last_name,
+        email: this.email,
+        password: this.password,
+        password_confirmation: this.passwordConfirmation
+      };
+      axios
+        .post("/api/users", params)
+        .then(response => {
+          $("#signupModal").modal("hide");
+          this.$router.push("/login");
+        })
+        .catch(error => {
+          this.errors = error.response.data.errors;
+          // this.errors = ["Invalid email or password."];
+          // this.email = "";
+          // this.password = "";
         });
     }
   }
