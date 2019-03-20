@@ -1,12 +1,34 @@
 <template>
   <div class="users-profile">
+ 
+      
 
-    <h1>My Profile</h1>  
+
+
+      <div class="card">
+        <h5 class="card-header">
+          My Profile
+        </h5>
+        <div class="card-body">
+          <h4 class="card-title">{{ user.formatted.full_name }}</h4>
+          <p class="card-text">
+            <p>First Name: {{ user.first_name }}</p>
+            <p>Last Name: {{ user.last_name }}</p>
+            <p>Email: {{ user.email }}</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+        <div class="card-footer text-muted">
+          2 days ago
+        </div>
+      </div>
+
+
+    <!-- <h1>My Profile</h1>  
 
     <h2>{{ user.formatted.full_name }}</h2>
     <p>First Name: {{ user.first_name }}</p>
     <p>Last Name: {{ user.last_name }}</p>
-    <p>Email: {{ user.email }}</p>
+    <p>Email: {{ user.email }}</p> -->
     <!-- <p>Password: {{ user.Password }}</p> -->
       
       <div>
@@ -36,9 +58,9 @@
       <h2><router-link to="/household">My Household</router-link></h2> 
         <p>Household Name: {{ user.household.name }}</p>
 
-      <div>
+      <div><br>
         <form v-on:submit.prevent="updateHousehold()">
-            <h2>Edit Household</h2>
+            <h3>Edit Household</h3>
             <ul>
               <li class="text-danger" v-for="error in errors">{{ error }}</li>
             </ul>
@@ -66,7 +88,7 @@
           <input type="text" class="form-control" v-model="newHouseholdName">
         </div>
         <input type="submit" class="btn btn-primary" value="Create">
-      </form>
+      </form><br>
       <h2><router-link to="/lists">My Lists</router-link></h2>
     </div>
 
@@ -75,8 +97,9 @@
     
 
 
-      
-    </div>
+     
+    
+  </div>
 </template>
 
 

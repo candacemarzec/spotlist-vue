@@ -1,6 +1,34 @@
 <template>
-  <div class="login">
-    <div class="container">
+  <div class="login"> 
+    <div class="container">  
+    
+<!--     <div class="signin-page">
+      <br><br><br>
+      <div class="wrapper" style="margin-top: 50px">
+        <div class="header">
+          <h1>Log In</h1>
+        </div>
+        <form v-on:submit.prevent="submit()">
+          <ul>
+            <li class="text-danger" v-for="error in errors">{{ error }}</li>
+          </ul>
+          <div class="form-field">
+            <input type="email" placeholder="Email">
+          </div>
+          <div class="form-field">
+            <input type="password" placeholder="Password">
+          </div>
+          <div class="form-action">
+            <input type="submit" class="btn-shadow btn-shadow-primary" value="Submit">
+          </div>
+        </form>
+      </div>
+    </div>  -->  
+
+
+
+
+     
       <form v-on:submit.prevent="submit()">
         <h1>Login</h1>
         <ul>
@@ -15,11 +43,15 @@
           <input type="password" class="form-control" v-model="password">
         </div>
         <input type="submit" class="btn btn-primary" value="Login">
-        <!-- <button v-bind:to="'/users/' + user.id">Login</button> -->
       </form>
-    </div>
+
+
+
+  </div>
   </div>
 </template>
+
+
 
 <script>
 import axios from "axios";
