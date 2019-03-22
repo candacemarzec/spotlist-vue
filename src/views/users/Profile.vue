@@ -116,7 +116,7 @@
               </h1>
               <div class="form-group">
                 <label>Name</label>
-                <input type="text" class="form-control" v-model="household.name">
+                <input type="text" class="form-control" v-model="user.household.name">
               </div>
               <div class="form-group">
                 <label>Add Member(s)</label>
@@ -212,7 +212,7 @@ export default {
         .patch("/api/users/me", userParams)
         .then(response => {
           console.log("Success!", response.data);
-          this.$router.push("/users/" + this.user.id);
+          this.user = response.data;
         })
         .catch(error => {
           this.errors = error.response.data.errors;
@@ -241,15 +241,15 @@ export default {
 
     updateHousehold: function() {
       var householdParams = {
-        name: this.household.name
+        name: this.user.household.name
       };
 
       axios
         .patch("/api/households/" + this.household.id, householdParams)
         .then(response => {
           console.log("Success!", response.data);
+          this.user.household = response.data;
           $("#householdUpdateModal").modal("hide");
-          this.$router.push("/users/" + this.user.id);
         })
         .catch(error => {
           this.errors = error.response.data.errors;

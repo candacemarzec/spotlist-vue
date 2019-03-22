@@ -14,45 +14,84 @@
       </section>
     </div>
 
+    <div class="event-tickets">
+      <div class="container">
+        <div class="row">
+          <div v-for="list in household.lists" class="col-md-4">
+            <div class="ticket">
+              <p class="ticket-title">
+                {{ list.store_name }} <i data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)" class="fa fa-pencil"></i>
+              </p>
+              <div class="text-center pb-4 mb-4">
+                <a href="#" class="btn-get-tickets" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
+                  Add Item
+                </a>
+              </div>
+              <hr>
+
+
+              <div id="accordion">
+                <div v-for="item in list.items" class="card">
+                  <div class="card-header" :id="'heading' + item.id" >
+                    <h5 class="mb-0">
+                      <a class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
+                        {{ item.name }}
+                      </a>
+                      <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
+                        Edit Item
+                      </button>
+                    </h5>
+                  </div>
+
+                  <div :id="'collapse' + item.id" class="collapse" role="tabpanel">
+                    <div class="card-body">
+                      <p>{{ item.need_by_date }}</p>
+                      <p>{{ item.coupon_url }}</p>
+                      <img :src="item.image_url">
+                    </div>
+                  </div>
+                </div>
+              </div>
 
 
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createListModal">
-      Create A List
-    </button>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateListModal">
-      Update List
-    </button>
-    <button class="btn-shadow btn-shadow-sm btn-shadow-danger" v-on:click="destroyList(list)">Delete List</button>
-    <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#updateItemModal">
-      Edit Item
-    </button>
-    <button type="button" class="btn btn-primary btn-shadow-sm" data-toggle="modal" data-target="#createItemModal">
-      Add Item
-    </button>
-    <button class="btn-shadow btn-shadow-sm btn-shadow-danger" v-on:click="destroyItem(item, list)">Delete Item</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+
+    
+    <!-- <button class="btn-shadow btn-shadow-sm btn-shadow-danger" v-on:click="destroyList(list)">Delete List</button> -->
+    <!-- <button class="btn-shadow btn-shadow-sm btn-shadow-danger" v-on:click="destroyItem(item, list)">Delete Item</button> -->
 
     
 
-  
-  <div v-for="list in household.lists">
-      <div class="card border-success mb-3 text-center">
-          <div class="card-body col-md-6">
-            <h4 class="card-title">{{ list.store_name }}</h4>
-          </div>
-        </div>
-        <div v-for="item in list.items">
+  <!-- Accordian List -->
+       <div v-for="list in household.lists">
+          {{ list.store_name }}
+
+          <button type="button" class="btn btn-primary btn-shadow-sm float-right" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
+            Add Item
+          </button>
+
+
           <div id="accordion">
-            <div class="card">
-              <div class="card-header" id="headingOne">
+            <div v-for="item in list.items" class="card">
+              <div class="card-header" :id="'heading' + item.id" >
                 <h5 class="mb-0">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                    <p>{{ item.name }}</p>
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
+                    {{ item.name }}
                   </a>
+                  <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
+                    Edit Item
+                  </button>
                 </h5>
               </div>
 
-              <div id="collapseOne" class="collapse show" role="tabpanel">
+              <div :id="'collapse' + item.id" class="collapse" role="tabpanel">
                 <div class="card-body">
                   <p>{{ item.need_by_date }}</p>
                   <p>{{ item.coupon_url }}</p>
@@ -60,23 +99,13 @@
                 </div>
               </div>
             </div>
-            <div class="card">
-              <div class="card-header" id="headingTwo">
-                <h5 class="mb-0">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                    Collapsible Group Item #2
-                  </a>
-                </h5>
-              </div>
-              <div id="collapseTwo" class="collapse">
-                <div class="card-body">
-                </div>
-              </div>
-            </div>
           </div>
-        </div>
-  </div>
- 
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)">
+          Edit List
+        </button>
+        <button class="btn-shadow btn-shadow-sm btn-shadow-danger" v-on:click="destroyList(list)">Delete List</button>
+     </div>
 
 
 
@@ -85,9 +114,11 @@
 
    
 
-
-
 <!-- New List Modal -->
+ <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createListModal">
+   Create A List
+ </button>
+
     <div class="modal fade" id="createListModal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -122,7 +153,13 @@
     </div>
 
 
+
+
     <!--  Update List Modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateListModal">
+      Edit List
+    </button> -->
+
     <div class="modal fade" id="updateListModal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -135,17 +172,17 @@
             <ul>
               <li class="text-danger" v-for="error in errors">{{ error }}</li>
             </ul>
-            <form class="ecommerce-sign-up-form" v-on:submit.prevent="updateList(list)">
+            <form class="ecommerce-sign-up-form" v-on:submit.prevent="updateList(currentList)">
              <h1>
-               Edit List
+               Edit {{ currentList.store_name }}
              </h1>
              <div class="form-group">
                <label>Store Name</label>
-               <input type="text" class="form-control" v-model="list.store_name">
+               <input type="text" class="form-control" v-model="currentList.store_name">
              </div>
              <div class="form-group">
                <label>Notes</label>
-               <textarea type="text" class="form-control" v-model="list.notes"></textarea>
+               <textarea type="text" class="form-control" v-model="currentList.notes"></textarea>
              </div>
              <div class="form-action">
                <button type="submit" class="btn-shadow btn-shadow-dark">Update</button>
@@ -154,12 +191,17 @@
           </div>
         </div>
       </div>
-    </div> 
+    </div>
+
+   
+
+
     
+    <!--  Create Item Modal  -->
+    <!-- <button type="button" class="btn btn-primary btn-shadow-sm" data-toggle="modal" data-target="#createItemModal">
+      Add Item
+    </button> -->
 
-
-
-   <!--  Create Item Modal  -->
     <div class="modal fade" id="createItemModal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -172,7 +214,7 @@
             <ul>
               <li class="text-danger" v-for="error in errors">{{ error }}</li>
             </ul>
-            <form class="ecommerce-sign-up-form" v-on:submit.prevent="createItem(list)">
+            <form class="ecommerce-sign-up-form" v-on:submit.prevent="createItem(currentList)">
                <h1>
                  Add Item
                </h1>
@@ -199,52 +241,59 @@
           </div>
         </div>
       </div>
-    </div>  
+    </div> 
+
 
 
 
       <!-- Update Item Modal --> 
-      <div class="modal fade" id="updateItemModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <ul>
-                <li class="text-danger" v-for="error in errors">{{ error }}</li>
-              </ul>
-              <form class="ecommerce-sign-up-form" v-on:submit.prevent="updateItem(item)">
-                 <h1>
-                   Edit Item
-                 </h1>
-                 <div class="form-group">
-                   <label>Name</label>
-                   <input type="text" class="form-control" v-model="item.name">
-                 </div>
-                 <div class="form-group">
-                   <label>Coupon</label>
-                   <input type="text" class="form-control" v-model="item.coupon_url">
-                 </div>
-                 <div class="form-group">
-                   <label>Image</label>
-                   <input type="text" class="form-control" v-model="item.image_url">
-                 </div>
-                 <div class="form-group">
-                   <label>Need by date</label>
-                   <input type="text" class="form-control" v-model="item.need_by_date">
-                 </div>             
-                 <div class="form-action">
-                   <button type="submit" class="btn-shadow btn-shadow-dark">Update Item</button>
-                 </div>
-              </form>
-            </div>
+    <!-- <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#updateItemModal">
+      Edit Item
+    </button> -->
+
+    <div class="modal fade" id="updateItemModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul>
+              <li class="text-danger" v-for="error in errors">{{ error }}</li>
+            </ul>
+            <form class="ecommerce-sign-up-form" v-on:submit.prevent="updateItem(currentItem)">
+               <h1>
+                 Edit {{ currentItem.name }}
+               </h1>
+               <div class="form-group">
+                 <label>Name</label>
+                 <input type="text" class="form-control" v-model="currentItem.name">
+               </div>
+               <div class="form-group">
+                 <label>Coupon</label>
+                 <input type="text" class="form-control" v-model="currentItem.coupon_url">
+               </div>
+               <div class="form-group">
+                 <label>Image</label>
+                 <input type="text" class="form-control" v-model="currentItem.image_url">
+               </div>
+               <div class="form-group">
+                 <label>Need by date</label>
+                 <input type="text" class="form-control" v-model="currentItem.need_by_date">
+               </div>             
+               <div class="form-action">
+                 <button type="submit" class="btn-shadow btn-shadow-dark">Update Item</button>
+               </div>
+            </form>
           </div>
         </div>
-      </div> 
-        
+      </div>
+    </div>
+    </div> 
+    </div> 
+
           
 
     
@@ -255,7 +304,7 @@
 
 
     <!-- List Actions   -->
-<!--     <div>
+    <!-- <div>
       <form v-on:submit.prevent="createList()">
         <h2>New List</h2>
         <ul>
@@ -269,17 +318,20 @@
         </div>
         <input type="submit" value="Add List">
       </form>
-    </div>   -->
+    </div>  --> 
 
 
 
-  <!--   <div v-for="list in household.lists">
+
+
+
+    <!-- <div v-for="list in household.lists">
       <h2>{{ list.store_name }}</h2>
-      <p>Notes: {{ list.notes }}</p> -->
+      <p>Notes: {{ list.notes }}</p>
 
 
 
-<!--       <form v-on:submit.prevent="updateList(list)">
+      <form v-on:submit.prevent="updateList(list)">
         <h2>Edit List</h2>
         <ul>
           <li class="text-danger" v-for="error in errors">{{ error }}</li>
@@ -291,12 +343,12 @@
           <textarea class="form-control" v-model="list.notes"></textarea><br> 
           <input type="submit" value="Update List">        
         </div>
-      </form> -->
+      </form>
 
         
 
 
-<!--       <div>
+      <div>
         <form v-on:submit.prevent="createItem(list)">
           <h2>New Item</h2>
           <ul>
@@ -367,9 +419,9 @@
   background-image: url(/images/unsplash/evie-calder-857249-unsplash.jpg);
 }
 
-/*.career-post-header {
-  background-image: url("/images/unsplash/evie-calder-857249-unsplash.jpg");
-}*/
+.event-tickets .ticket {
+  background: #f9f9f9;
+}
 </style>
 
 
@@ -383,6 +435,8 @@ export default {
       household: {},
       list: {},
       item: {},
+      currentList: {},
+      currentItem: {},
       newListStoreName: "",
       newListNotes: "",
       newItemName: "",
@@ -434,7 +488,9 @@ export default {
           this.status = error.response.status;
         });
     },
-
+    setCurrentList: function(list) {
+      this.currentList = list;
+    },
     updateList: function(list) {
       console.log(list);
       var listParams = {
@@ -483,7 +539,9 @@ export default {
           this.status = error.response.status;
         });
     },
-
+    setCurrentItem: function(item) {
+      this.currentItem = item;
+    },
     updateItem: function(item) {
       var itemParams = {
         name: item.name,

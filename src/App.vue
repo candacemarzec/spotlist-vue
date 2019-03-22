@@ -11,15 +11,15 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbar-collapse">
           <ul class="navbar-nav">
 
-
-            <li class="nav-item" v-if="isLoggedIn()">
-              <a class="nav-link nav-link--rounded" href="/logout">Logout</a>
-            </li>
             <li class="nav-item" v-if="!isLoggedIn()" data-toggle="modal" data-target="#loginModal">
               <a class="nav-link">Login</a>
             </li>
             <li class="nav-item" v-if="!isLoggedIn()" data-toggle="modal" data-target="#signupModal">
               <a class="nav-link nav-link--rounded">Signup</a>
+            </li>
+
+            <li class="nav-item" v-if="isLoggedIn()">
+              <a class="nav-link" href="/logout">Logout</a>
             </li>
 
           </ul>
