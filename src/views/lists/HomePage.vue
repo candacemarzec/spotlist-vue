@@ -113,6 +113,7 @@ export default {
       lists: [],
       newListStoreName: "",
       newListNotes: "",
+      newItemName: "",
       newItemCouponUrl: "",
       newItemImageUrl: "",
       newItemNeedByDate: "",

@@ -1,13 +1,22 @@
 <template>
   <div class="home">
 
-    <div class="header-hero header-hero--light">
-      <div class="container">
-        <div class="row text-center">
-          <div class="col-12 fadeInScaleDown">
-          </div>
+
+
+    <div class="agency-hero">
+      <section class="container">
+        <div class="hero-text">
+          <h1 class="customFadeInUp">
+            We create digital products
+          </h1>
+          <p class="customFadeInUp">
+            We specialise in designing interfaces, engaging experiences and meaningful products
+          </p>
+          <!-- <a href="agency-portfolio-4.html" class="customFadeInUp">
+            See our work
+          </a> -->
         </div>
-      </div>
+      </section>
     </div>
 
 
@@ -15,7 +24,7 @@
 </template>
 
 <style>
-.header-hero--light {
+.agency-hero {
   background-image: url("/images/unsplash/plush-design-studio-553319-unsplash.jpg");
 }
 </style>

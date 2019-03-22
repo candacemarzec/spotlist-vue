@@ -5,8 +5,11 @@
     <div class="account-page">
       <div class="container">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="#">Home</a>
+          <li class="breadcrumb-item" v-if="user.household">
+            <a href="/household">Home</a>
+          </li>  
+          <li class="breadcrumb-item" v-if="!user.household"> 
+            <a href="/lists">Home</a> 
           </li>
           <li class="breadcrumb-item active">My Profile</li>
         </ol>
@@ -60,20 +63,38 @@
 
     <!-- User with Household -->
     <div v-if="user.household">
-      <div class="card">
+      <div class="row">
+        <div class="card col-md text-center w-75">
+          <h5 class="card-header">
+            My Household
+          </h5>
+          <div class="card-body">
+            <p class="card-text">Household Name: {{ user.household.name }}</p>
+            <p class="card-text">Household Members:</p>
+            <button class="btn-shadow btn-shadow-sm btn-shadow-dark" data-toggle="modal" data-target="#householdUpdateModal" >Edit</button>
+            
+          </div>
+            <!-- <div class="card-footer text-muted">
+            </div> -->
+        </div> 
+      </div>
+    </div> 
+
+
+    <!-- User without Household -->
+    <div v-if="!user.household">
+      <div class="row">
+      <div class="card col-md text-center w-75">
         <h5 class="card-header">
-          My Household
         </h5>
         <div class="card-body">
-          <p class="card-text">Household Name: {{ user.household.name }}</p>
-          <p class="card-text">Household Members:</p>
-          <button class="btn-shadow btn-shadow-sm btn-shadow-dark" data-toggle="modal" data-target="#householdUpdateModal" >Edit</button>
-          <button class="btn-shadow btn-shadow-sm btn-shadow-danger float-right" v-on:click="destroyHousehold()">Delete</button>
-          </div>
-          <div class="card-footer text-muted">
-          </div>
+          <button type="submit" class="btn-shadow btn-shadow-dark" data-toggle="modal" data-target="#householdCreateModal">Create A Household</button> </div>
+          <!-- <div class="card-footer text-muted">
+          </div> -->
       </div> 
+    </div>
     </div> 
+
 
 
     <!-- Household Edit Modal -->
@@ -86,6 +107,9 @@
             </button>
           </div>
           <div class="modal-body">
+            <ul>
+              <li class="text-danger" v-for="error in errors">{{ error }}</li>
+            </ul>
             <form class="ecommerce-sign-up-form" v-on:submit.prevent="updateHousehold()">
               <h1>
                 Edit Household
@@ -95,11 +119,47 @@
                 <input type="text" class="form-control" v-model="household.name">
               </div>
               <div class="form-group">
-                <label>Add Member</label>
+                <label>Add Member(s)</label>
                 <input type="text" class="form-control" >
               </div>
               <div class="form-action">
                 <button type="submit" class="btn-shadow btn-shadow-dark">Update Household</button>
+              </div>
+            </form>
+            <button class="btn-shadow btn-shadow-sm btn-shadow-danger float-right" v-on:click="destroyHousehold()">Delete Household</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Household Create Modal -->
+    <div class="modal fade" id="householdCreateModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul>
+              <li class="text-danger" v-for="error in errors">{{ error }}</li>
+            </ul>
+            <form class="ecommerce-sign-up-form" v-on:submit.prevent="createHousehold()">
+              <h1>
+                Create Household
+              </h1>
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" v-model="newHouseholdName">
+              </div>
+              <div class="form-group">
+                <label>Add Member(s)</label>
+                <input type="text" class="form-control" >
+              </div>
+              <div class="form-action">
+                <button type="submit" class="btn-shadow btn-shadow-dark">Submit</button>
               </div>
             </form>
           </div>
@@ -107,58 +167,17 @@
       </div>
     </div>
 
-
-    
-
-
-    <!-- User with household   -->
-    <div v-if="user.household">
-      <h2><router-link to="/household">My Household Page</router-link></h2> 
-        <p>Household Name: {{ user.household.name }}</p>
-
-      <div><br>
-        <form v-on:submit.prevent="updateHousehold()">
-            <h3>Edit Household</h3>
-            <ul>
-              <li class="text-danger" v-for="error in errors">{{ error }}</li>
-            </ul>
-            <div class="form-group">
-              <label>Name: </label> 
-              <input type="text" class="form-control" v-model="household.name">
-            </div>
-            <button v-bind:to="'/households/' + household.id + '/edit'">Update</button><br>
-            <!-- show other members here -->
-          </form>
-      </div>
-     <button v-on:click="destroyHousehold()">Delete</button><br>
-    </div>
-    
-
-    <!-- User without household -->
-    <div v-if="!user.household">
-      <form v-on:submit.prevent="createHousehold()">
-        <h1>New Household</h1>
-        <ul>
-          <li class="text-danger" v-for="error in errors">{{ error }}</li>
-        </ul>
-        <div class="form-group">
-          <label>Name: </label> 
-          <input type="text" class="form-control" v-model="newHouseholdName">
-        </div>
-        <input type="submit" class="btn btn-primary" value="Create">
-      </form><br>
-      <h2><router-link to="/lists">My Lists</router-link></h2>
-    </div>
-
-
-   
-    
-
-
-     
     
   </div>
 </template>
+
+
+<style>
+.card {
+  border: 0;
+  background-color: transparent;
+}
+</style>
 
 
 <script>
@@ -215,6 +234,8 @@ export default {
       axios.post("/api/households", householdParams).then(response => {
         this.household = response.data;
         this.newHouseholdName = "";
+        $("#householdCreateModal").modal("hide");
+        this.$router.push("/users/" + this.user.id);
       });
     },
 
@@ -239,6 +260,7 @@ export default {
     destroyHousehold: function() {
       axios.delete("/api/households/" + this.household.id).then(response => {
         console.log("Success!", response.data);
+        $("#householdUpdateModal").modal("hide");
         this.$router.push("/users/" + this.user.id);
       });
     }

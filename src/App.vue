@@ -11,29 +11,10 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbar-collapse">
           <ul class="navbar-nav">
 
-            <li class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                Blogs
-                <i class="ion-chevron-down"></i>
-              </a>
-              <div class="dropdown-menu" role="menu">
-                <a class="dropdown-item" href="blog.html">Blog list</a>
-                <a class="dropdown-item" href="blog-3-cols.html">Blog columns</a>
-                <a class="dropdown-item" href="blog-grid.html">Blog grid</a>
-                <a class="dropdown-item" href="blog-sidebar.html">Blog sidebar</a>
-                <a class="dropdown-item" href="blog-masonry.html">Blog masonry</a>
-                <a class="dropdown-item" href="blog-timeline.html">Blog timeline</a>
-                <a class="dropdown-item" href="blog-post.html">Single blog post</a>
-                <a class="dropdown-item" href="blog-post-alt.html">Single blog post 2</a>
-                <a class="dropdown-item" href="blog-post-3.html">Single blog post 3</a>
-              </div>
-            </li>
-
 
             <li class="nav-item" v-if="isLoggedIn()">
               <a class="nav-link nav-link--rounded" href="/logout">Logout</a>
             </li>
-
             <li class="nav-item" v-if="!isLoggedIn()" data-toggle="modal" data-target="#loginModal">
               <a class="nav-link">Login</a>
             </li>
