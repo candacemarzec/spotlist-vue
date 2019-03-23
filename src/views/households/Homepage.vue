@@ -67,7 +67,7 @@
                       <button type="button" class="btn-pill btn-pill-sm btn-pill-secondary float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
                         Edit
                       </button> 
-                      <p>{{ item.need_by_date }}</p>
+                      <p>{{ calendarDate(item.need_by_date) }}</p>
                       <!-- <p>{{ item.coupon_url }}</p> -->
                         <a href="item.coupon_url">Coupon(s)</a>
                       <div class="col-md-6 mt-3 pt-2">
@@ -366,6 +366,7 @@
 <script>
 /* global $ */
 var axios = require("axios");
+import moment from "moment";
 
 export default {
   data: function() {
@@ -491,7 +492,6 @@ export default {
         .patch("/api/items/" + item.id, itemParams)
         .then(response => {
           console.log("Success!", response.data);
-          $("#datepicker2").datepicker();
           $("#updateItemModal").modal("hide");
         })
         .catch(error => {
@@ -505,6 +505,9 @@ export default {
         var index = list.items.indexOf(item);
         list.items.splice(index, 1);
       });
+    },
+    calendarDate: function(date) {
+      return moment(date).format("MM/DD/YYYY");
     }
   }
 };
