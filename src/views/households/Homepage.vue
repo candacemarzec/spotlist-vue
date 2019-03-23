@@ -1,7 +1,7 @@
 <template>
   <div class="households-homepage">
 
- 
+ <!-- Image -->
     <div class="career-post-header">    
       <section class="container">
         <div class="row">
@@ -12,48 +12,79 @@
           </div>
         </div>
       </section>
-    </div>
+    </div><br>
 
+
+<!-- Create List Button  -->
+    <div class="tickets container">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <p class="m-md-0">
+        </p>
+        <button href="#" class="btn-pill btn-pill-lg btn-pill-primary" data-toggle="modal" data-target="#createListModal">
+          Make A List
+        </button>
+        <p class="m-0">
+        </p>
+      </div>
+    </div>
+ 
+
+    <!-- Card -->
     <div class="event-tickets">
       <div class="container">
         <div class="row">
-          <div v-for="list in household.lists" class="col-md-4">
+          <div v-for="list in household.lists" class="col-md-6">
             <div class="ticket">
               <p class="ticket-title">
-                {{ list.store_name }} <i data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)" class="fa fa-pencil"></i>
+                {{ list.store_name }} <i data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)" class="fa fa-pencil float-right"></i>
               </p>
               <div class="text-center pb-4 mb-4">
-                <a href="#" class="btn-get-tickets" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
+                <a href="#" class="btn-pill btn-pill-sm btn-pill-secondary" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
                   Add Item
                 </a>
               </div>
               <hr>
 
 
+        <!-- Accordion -->
               <div id="accordion">
                 <div v-for="item in list.items" class="card">
-                  <div class="card-header" :id="'heading' + item.id" >
+                  <div class="card-header accordion" :id="'heading' + item.id" >
                     <h5 class="mb-0">
+                      <div class="form-check-inline float-right">
+                        <label class="form-check-label">
+                           <input type="radio" class="form-check-input" v-on:click="destroyItem(item, list)"/>
+                        </label>
+                      </div>
                       <a class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
-                        {{ item.name }}
+                          {{ item.name }}  
                       </a>
-                      <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
-                        Edit Item
-                      </button>
                     </h5>
                   </div>
 
                   <div :id="'collapse' + item.id" class="collapse" role="tabpanel">
                     <div class="card-body">
+                      <button type="button" class="btn-pill btn-pill-sm btn-pill-secondary float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
+                        Edit
+                      </button> 
                       <p>{{ item.need_by_date }}</p>
-                      <p>{{ item.coupon_url }}</p>
-                      <img :src="item.image_url">
+                      <!-- <p>{{ item.coupon_url }}</p> -->
+                        <a href="item.coupon_url">Coupon(s)</a>
+                      <div class="col-md-6 mt-3 pt-2">
+                        <div class="view z-depth-1">
+                          <img :src="item.image_url" alt="" class="img-fluid">
+                        </div> 
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-
-
+              </div><br>
+              
+              <div class="card-footer">
+                <label>Notes:</label>
+                <textarea type="text" class= "form-control card-footer textarea" v-model="list.notes"></textarea>
+              </div><br>
+                <button class="btn-pill btn-pill-sm btn-pill-danger float-right" v-on:click="destroyList(list)">Delete</button><br>
 
             </div>
           </div>
@@ -69,43 +100,12 @@
 
     
 
-  <!-- Accordian List -->
-       <div v-for="list in household.lists">
-          {{ list.store_name }}
 
-          <button type="button" class="btn btn-primary btn-shadow-sm float-right" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
-            Add Item
-          </button>
-
-
-          <div id="accordion">
-            <div v-for="item in list.items" class="card">
-              <div class="card-header" :id="'heading' + item.id" >
-                <h5 class="mb-0">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
-                    {{ item.name }}
-                  </a>
-                  <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
-                    Edit Item
-                  </button>
-                </h5>
-              </div>
-
-              <div :id="'collapse' + item.id" class="collapse" role="tabpanel">
-                <div class="card-body">
-                  <p>{{ item.need_by_date }}</p>
-                  <p>{{ item.coupon_url }}</p>
-                  <img :src="item.image_url">
-                </div>
-              </div>
-            </div>
-          </div>
-
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)">
-          Edit List
-        </button>
-        <button class="btn-shadow btn-shadow-sm btn-shadow-danger" v-on:click="destroyList(list)">Delete List</button>
-     </div>
+ <!--  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)">
+    Edit List
+  </button> -->
+  
+    
 
 
 
@@ -115,9 +115,9 @@
    
 
 <!-- New List Modal -->
- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createListModal">
+<!--  <button type="button" class="btn-pill btn-pill-primary" data-toggle="modal" data-target="#createListModal">
    Create A List
- </button>
+ </button> -->
 
     <div class="modal fade" id="createListModal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
@@ -174,7 +174,7 @@
             </ul>
             <form class="ecommerce-sign-up-form" v-on:submit.prevent="updateList(currentList)">
              <h1>
-               Edit {{ currentList.store_name }}
+               Edit {{ currentList.store_name }} List
              </h1>
              <div class="form-group">
                <label>Store Name</label>
@@ -281,7 +281,7 @@
                </div>
                <div class="form-group">
                  <label>Need by date</label>
-                 <input type="text" class="form-control" v-model="currentItem.need_by_date">
+                 <input type="date" class="form-control" v-model="currentItem.need_by_date">
                </div>             
                <div class="form-action">
                  <button type="submit" class="btn-shadow btn-shadow-dark">Update Item</button>
@@ -291,128 +291,15 @@
         </div>
       </div>
     </div>
-    </div> 
-    </div> 
+   
 
-          
-
-    
-
-
-
-
-
-
-    <!-- List Actions   -->
-    <!-- <div>
-      <form v-on:submit.prevent="createList()">
-        <h2>New List</h2>
-        <ul>
-          <li class="text-danger" v-for="error in errors">{{ error }}</li>
-        </ul>
-        <div class="form-group">
-          <label>Store Name: </label> 
-          <input type="text" class="form-control" v-model="newListStoreName"><br>
-          <label>Notes: </label>
-          <textarea v-model="newListNotes"></textarea><br>
-        </div>
-        <input type="submit" value="Add List">
-      </form>
-    </div>  --> 
-
-
-
-
-
-
-    <!-- <div v-for="list in household.lists">
-      <h2>{{ list.store_name }}</h2>
-      <p>Notes: {{ list.notes }}</p>
-
-
-
-      <form v-on:submit.prevent="updateList(list)">
-        <h2>Edit List</h2>
-        <ul>
-          <li class="text-danger" v-for="error in errors">{{ error }}</li>
-        </ul>
-        <div class="form-group">
-          <label>Store Name: </label>
-          <input type="text" class="form-control" v-model="list.store_name"><br>
-          <label>Notes: </label>
-          <textarea class="form-control" v-model="list.notes"></textarea><br> 
-          <input type="submit" value="Update List">        
-        </div>
-      </form>
-
-        
-
-
-      <div>
-        <form v-on:submit.prevent="createItem(list)">
-          <h2>New Item</h2>
-          <ul>
-            <li class="text-danger" v-for="error in errors">{{ error }}</li>
-          </ul>
-          <div class="form-group">
-            <label>Name: </label>
-            <input type="text" class="form-control" v-model="newItemName"><br>
-            <label>Coupon: </label>
-            <input type="text" class="form-control" v-model="newItemCouponUrl"><br>
-            <label>Image: </label>
-            <input type="text" class="form-control" v-model="newItemImageUrl"><br>
-            <label>Need by: </label>
-            <input type="text" class="form-control" v-model="newItemNeedByDate"><br>
-            <input type="submit" value="Add New Item">
-          </div> 
-        </form>
-
-
-        <div v-for="item in list.items">
-          <p>{{ item.name }}</p>
-          <p>{{ item.coupon_url }}</p>
-          <p>{{ item.image_url }}</p>
-          <p>{{ item.need_by_date }}</p>
-
-
-        <div>
-          <form v-on:submit.prevent="updateItem(item)">
-            <h2>Edit Item</h2>
-            <ul>
-              <li class="text-danger" v-for="error in errors">{{ error }}</li>
-            </ul>
-            <div class="form-group">
-              <label>Name: </label>
-              <input type="text" class="form-control" v-model="item.name"><br>
-              <label>Coupon: </label>
-              <input type="text" class="form-control" v-model="item.coupon_url"><br>
-              <label>Image: </label> 
-              <input type="text" class="form-control" v-model="item.image_url"><br> 
-              <label>Need by: </label> 
-              <input type="text" class="form-control" v-model="item.need_by_date"><br> 
-              <input type="submit" value="Edit Item">
-            </div> 
-          </form> 
-          <button v-on:click="destroyItem(item, list)">Delete Item</button><br> 
-        </div>
-        </div>
-
-
-        
-      </div>      
-    </div> -->
-
-
-
-
-
-  </div>
+    </div>     
 </template>
 
 
 <style>
 .career-post-header {
-  min-height: 380px;
+  min-height: 350px;
   position: relative;
   background-size: cover;
   background-position: center top;
@@ -421,6 +308,57 @@
 
 .event-tickets .ticket {
   background: #f9f9f9;
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
+  border-radius: 10px;
+}
+
+.tickets-container {
+  background: #d0efd2;
+}
+
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+  background-color: #f9f9f9;
+  color: #d0efd2;
+  cursor: pointer;
+  padding: 0px;
+  width: 100%;
+  text-align: left;
+  text-indent: 25px;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.accordion:hover {
+  background-color: white;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
+}
+
+.card-footer {
+  background: #f9f9f9;
+}
+
+.textarea {
+  width: 100%;
+  height: 150px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  resize: none;
 }
 </style>
 
@@ -553,6 +491,7 @@ export default {
         .patch("/api/items/" + item.id, itemParams)
         .then(response => {
           console.log("Success!", response.data);
+          $("#datepicker2").datepicker();
           $("#updateItemModal").modal("hide");
         })
         .catch(error => {
