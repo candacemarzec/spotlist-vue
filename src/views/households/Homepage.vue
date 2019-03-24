@@ -20,7 +20,7 @@
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
         <p class="m-md-0">
         </p>
-        <button href="#" class="btn-pill btn-pill-lg btn-pill-primary" data-toggle="modal" data-target="#createListModal">
+        <button href="#" class="btn-pill btn-pill-lg create-button" data-toggle="modal" data-target="#createListModal">
           Make A List
         </button>
         <p class="m-0">
@@ -36,10 +36,11 @@
           <div v-for="list in household.lists" class="col-md-6">
             <div class="ticket">
               <p class="ticket-title">
-                {{ list.store_name }} <i data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)" class="fa fa-pencil float-right"></i>
+                <i data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)" class="fa fa-pencil float-right"></i><br>
+                {{ list.store_name }} 
               </p>
               <div class="text-center pb-4 mb-4">
-                <a href="#" class="btn-pill btn-pill-sm btn-pill-secondary" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
+                <a href="#" class="btn-pill btn-pill-sm create-button" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
                   Add Item
                 </a>
               </div>
@@ -47,6 +48,7 @@
 
 
         <!-- Accordion -->
+        
               <div id="accordion">
                 <div v-for="item in list.items" class="card">
                   <div class="card-header accordion" :id="'heading' + item.id" >
@@ -64,12 +66,13 @@
 
                   <div :id="'collapse' + item.id" class="collapse" role="tabpanel">
                     <div class="card-body">
-                      <button type="button" class="btn-pill btn-pill-sm btn-pill-secondary float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
+                      <button type="button" class="btn-pill btn-pill-sm edit-button float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
                         Edit
                       </button> 
-                      <p>{{ calendarDate(item.need_by_date) }}</p>
-                      <!-- <p>{{ item.coupon_url }}</p> -->
-                        <a href="item.coupon_url">Coupon(s)</a>
+                      <div v-if="item.need_by_date">
+                        {{ calendarDate(item.need_by_date) }}
+                      </div>
+                        <p>{{ item.coupon_url }}</p>
                       <div class="col-md-6 mt-3 pt-2">
                         <div class="view z-depth-1">
                           <img :src="item.image_url" alt="" class="img-fluid">
@@ -80,11 +83,11 @@
                 </div>
               </div><br>
               
-              <div class="card-footer">
-                <label>Notes:</label>
+              <div class="card-footer note-footer">
+                <h4>Notes:</h4>
                 <textarea type="text" class= "form-control card-footer textarea" v-model="list.notes"></textarea>
               </div><br>
-                <button class="btn-pill btn-pill-sm btn-pill-danger float-right" v-on:click="destroyList(list)">Delete</button><br>
+                <button class="btn-pill btn-pill-sm delete-button float-right" v-on:click="destroyList(list)">Delete List</button><br>
 
             </div>
           </div>
@@ -92,24 +95,6 @@
       </div>
     </div>
     
-
-
-    
-    <!-- <button class="btn-shadow btn-shadow-sm btn-shadow-danger" v-on:click="destroyList(list)">Delete List</button> -->
-    <!-- <button class="btn-shadow btn-shadow-sm btn-shadow-danger" v-on:click="destroyItem(item, list)">Delete Item</button> -->
-
-    
-
-
- <!--  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)">
-    Edit List
-  </button> -->
-  
-    
-
-
-
-
 
 
    
@@ -232,7 +217,7 @@
                </div>
                <div class="form-group">
                  <label>Need by date</label>
-                 <input type="text" class="form-control" v-model="newItemNeedByDate">
+                 <input type="date" class="form-control" v-model="newItemNeedByDate">
                </div>             
                <div class="form-action">
                  <button type="submit" class="btn-shadow btn-shadow-dark">Add Item to List</button>
@@ -307,21 +292,25 @@
 }
 
 .event-tickets .ticket {
-  background: #f9f9f9;
+  background: #ffffff;
   border-style: solid;
-  border-color: black;
+  border-color: #d3d3d3;
   border-width: thin;
   border-radius: 10px;
 }
 
+.event-tickets .ticket-title {
+  color: #626567;
+}
+
 .tickets-container {
-  background: #d0efd2;
+  background: #white;
 }
 
 /* Style the buttons that are used to open and close the accordion panel */
 .accordion {
-  background-color: #f9f9f9;
-  color: #d0efd2;
+  background-color: #ffffff;
+  color: #ffffff;
   cursor: pointer;
   padding: 0px;
   width: 100%;
@@ -333,9 +322,9 @@
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
-.active,
+.active-panel,
 .accordion:hover {
-  background-color: white;
+  background-color: #f5f5f5;
 }
 
 /* Style the accordion panel. Note: hidden by default */
@@ -346,8 +335,13 @@
   overflow: hidden;
 }
 
-.card-footer {
-  background: #f9f9f9;
+.collapsed {
+  color: #626567;
+}
+
+.note-footer {
+  background: #ffffff;
+  color: #626567;
 }
 
 .textarea {
@@ -357,8 +351,20 @@
   box-sizing: border-box;
   border: none;
   border-radius: 4px;
-  background-color: #f8f8f8;
+  background-color: #ffffff;
   resize: none;
+}
+/*buttons*/
+.create-button {
+  background-color: #4682b4;
+}
+
+.edit-button {
+  background-color: #66cdaa;
+}
+
+.delete-button {
+  background-color: #556b2f;
 }
 </style>
 

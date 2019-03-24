@@ -21,6 +21,8 @@
             </li>
           </ul>
 
+
+
           <!-- Tab panes -->
           <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="profile">
@@ -49,51 +51,56 @@
                       <label>Password</label>
                       <input type="password" class="form-control" v-model="user.password">
                     </div>
-                    <button type="submit" class="btn-shadow btn-shadow-dark">Update My Info</button><br>
+                    <button type="submit" class="btn-pill edit-button">Update My Info</button><br>
                   </form>
-                  <button class="btn-shadow btn-shadow-sm btn-shadow-danger float-right" v-on:click="destroyUser()">Delete My Profile</button>
                 </div>
               </div>
             </div>
+            
           </div>
         </div>
       </div>
     </div>
 
 
+
+
+
     <!-- User with Household -->
     <div v-if="user.household">
-      <div class="row">
-        <div class="card col-md text-center w-75">
-          <h5 class="card-header">
-            My Household
-          </h5>
-          <div class="card-body">
-            <p class="card-text">Household Name: {{ user.household.name }}</p>
-            <p class="card-text">Household Members:</p>
-            <button class="btn-shadow btn-shadow-sm btn-shadow-dark" data-toggle="modal" data-target="#householdUpdateModal" >Edit</button>
+      <div class="container text-center">
+           
+              <h3>My Household</h3>
+          
             
-          </div>
-            <!-- <div class="card-footer text-muted">
-            </div> -->
-        </div> 
+              <h4>{{ user.household.name }}</h4><br>
+              <h4>Household Members:</h4><br>
+              <button class="btn-pill btn-pill-sm edit-button" data-toggle="modal" data-target="#householdUpdateModal" >Edit Household</button>
+              
       </div>
+              <!-- <div class="card-footer text-muted">
+              </div> -->
     </div> 
+    
 
 
     <!-- User without Household -->
     <div v-if="!user.household">
-      <div class="row">
-      <div class="card col-md text-center w-75">
-        <h5 class="card-header">
-        </h5>
-        <div class="card-body">
-          <button type="submit" class="btn-shadow btn-shadow-dark" data-toggle="modal" data-target="#householdCreateModal">Create A Household</button> </div>
-          <!-- <div class="card-footer text-muted">
-          </div> -->
-      </div> 
-    </div>
-    </div> 
+      <div class="container">
+       <div class="row">
+        <div class="card col-md-12 text-center w-75">
+          <h5 class="card-header">
+          </h5>
+          <div class="card-body">
+            <button type="submit" class="btn-pill btn-pill-sm btn1" data-toggle="modal" data-target="#householdCreateModal">Create A Household</button> </div>
+            <!-- <div class="card-footer text-muted">
+            </div> -->
+          </div> 
+        </div>
+      </div>
+   </div> 
+
+   <button class="btn-pill btn-pill-sm float-right delete-button" v-on:click="destroyUser()">Delete My Profile</button><br> 
 
 
 
@@ -126,7 +133,7 @@
                 <button type="submit" class="btn-shadow btn-shadow-dark">Update Household</button>
               </div>
             </form>
-            <button class="btn-shadow btn-shadow-sm btn-shadow-danger float-right" v-on:click="destroyHousehold()">Delete Household</button>
+            <button class="btn-shadow btn-shadow-sm btn3 float-right" v-on:click="destroyHousehold()">Delete Household</button>
           </div>
         </div>
       </div>
@@ -173,9 +180,9 @@
 
 
 <style>
-.card {
-  border: 0;
-  background-color: transparent;
+.profile-form {
+  background-color: #ffffff;
+  font-weight: bold;
 }
 </style>
 
