@@ -19,8 +19,12 @@
             </li>
 
             <li class="nav-item" v-if="isLoggedIn()">
-              <a class="nav-link" href="/logout">Logout</a>
+              <a class="nav-link" href="/users/me">My Profile</a>
             </li>
+            <li class="nav-item" v-if="isLoggedIn()">
+              <a class="nav-link nav-link--rounded" href="/logout">Logout</a>
+            </li>
+            
 
           </ul>
         </div>

@@ -8,7 +8,7 @@
           <li class="breadcrumb-item" v-if="user.household">
             <a href="/household">Home</a>
           </li>  
-          <li class="breadcrumb-item" v-if="!user.household"> 
+          <li class="breadcrumb-item homepage" v-if="!user.household"> 
             <a href="/lists">Home</a> 
           </li>
           <li class="breadcrumb-item active">My Profile</li>
@@ -17,43 +17,23 @@
         <div class="account-wrapper">
           <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="nav-item">
-              <a class="nav-link active" href="account-profile.html" role="tab">{{ user.formatted.full_name }}</a>
+              <a class="nav-link active" href="account-profile.html" role="tab">{{ user.first_name}} {{ user.last_name }}</a>
             </li>
           </ul>
 
 
 
-          <!-- Tab panes -->
+                    <!-- Tab panes -->
           <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="profile">
               <div class="row profile-form">
-                <div class="col-md-3">
-                  <!-- <img src="../images/uifaces/10.jpg" class="avatar" />
+                <!-- <div class="col-md-3">
+                  <img src="../images/uifaces/10.jpg" class="avatar" />
                   <a href="#" class="btn-upload-avatar">
                     Upload new avatar
-                  </a> -->
-                </div>
-                <div class="col-md-8">
-                  <form v-on:submit.prevent="updateUser()">
-                    <div class="form-group">
-                      <label>First name</label>
-                      <input type="text" class="form-control" v-model="user.first_name">
-                    </div>
-                    <div class="form-group">
-                      <label>Last name</label>
-                      <input type="text" class="form-control" v-model="user.last_name">
-                    </div>
-                    <div class="form-group">
-                      <label>Email address</label>
-                      <input type="email" class="form-control" v-model="user.email">
-                    </div>
-                    <div class="form-group">
-                      <label>Password</label>
-                      <input type="password" class="form-control" v-model="user.password">
-                    </div>
-                    <button type="submit" class="btn-pill edit-button">Update My Info</button><br>
-                  </form>
-                </div>
+                  </a>
+                </div> -->
+                
               </div>
             </div>
             
@@ -64,43 +44,155 @@
 
 
 
+        <!-- User with Household -->
+
+        <div v-if="user.household">
+          <div id="checkout">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6">
+                  <section>
+                      <form v-on:submit.prevent="updateUser()">
+                        <div class="form-group">
+                          <label>First name</label>
+                          <input type="text" class="form-control" v-model="user.first_name">
+                        </div>
+                        <div class="form-group">
+                          <label>Last name</label>
+                          <input type="text" class="form-control" v-model="user.last_name">
+                        </div>
+                        <div class="form-group">
+                          <label>Email address</label>
+                          <input type="email" class="form-control" v-model="user.email">
+                        </div>
+                        <div class="form-group">
+                          <label>Password</label>
+                          <input type="password" class="form-control" v-model="user.password">
+                        </div>
+                        <button type="submit" class="btn-pill button-main">Update My Info</button>
+                        <button class="btn-pill btn-pill-sm float-right button-delete" v-on:click="destroyUser()">Delete My Profile</button>
+                      </form>
+                  </section>
+                </div>
 
 
-    <!-- User with Household -->
-    <div v-if="user.household">
-      <div class="container text-center">
-           
-              <h3>My Household</h3>
+                  <!-- Household Card -->
+                  <div class="col-md-6">
+                    <div id="checkout-cart-summary" class="clearfix float-right">
+                     <div class="line-items">
+                       <div class="item clearfix">
+                         <div class="details">
+                           <div class="name" >
+                            <h3>My Household Info</h3> 
+                           </div>
+                         </div>
+                         <i data-toggle="modal" data-target="#householdUpdateModal" class="icon-edit float-right"></i>
+                       </div>
+                     </div>
+
+                      <div class="line-items">
+                        <div class="item clearfix">
+                          <div class="details">
+                            <span class="name">
+                              <h6>Household Name:</h6>
+                            </span>
+                          </div>
+                          <div class="price float-right">
+                            <b>{{ user.household.name }}</b>
+                          </div>
+                        </div>
+                      </div> 
+                        <div class="line-items">
+                          <div class="item clearfix">
+                              <div class="details">
+                                <span class="name">
+                                  <h6>Household Members</h6>
+                                </span>
+                              </div>
+                              <div class="price float-right">
+                                  <!-- Member Names -->
+                              </div>
+                          </div>
+                        </div>
+                      
+                    </div>
+                  </div>
+
+             </div>
+           </div>
+         </div>
+        </div>  
+
+
+         <!-- User without Household -->
+          <div v-if="!user.household">
+            <div id="checkout">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-6">
+                    <section>
+                        <form v-on:submit.prevent="updateUser()">
+                          <div class="form-group">
+                            <label>First name</label>
+                            <input type="text" class="form-control" v-model="user.first_name">
+                          </div>
+                          <div class="form-group">
+                            <label>Last name</label>
+                            <input type="text" class="form-control" v-model="user.last_name">
+                          </div>
+                          <div class="form-group">
+                            <label>Email address</label>
+                            <input type="email" class="form-control" v-model="user.email">
+                          </div>
+                          <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" v-model="user.password">
+                          </div>
+                          <button type="submit" class="btn-pill button-main">Update My Info</button>
+                          <button class="btn-pill btn-pill-sm float-right button-delete" v-on:click="destroyUser()">Delete My Profile</button>
+                        </form>
+                    </section>
+                  </div>
+
+
+                    <!-- Create Household Card -->
+                    <div class="col-md-6">
+                      <div id="checkout-cart-summary" class="clearfix float-right">
+                       <div class="line-items">
+                         <div class="item clearfix">
+                           <div class="details">
+                             <div class="name" >
+                              <h3>Create A Household</h3>
+                              <button type="submit" class="btn-pill btn-pill-sm button-main" data-toggle="modal" data-target="#householdCreateModal">Create A Household</button>  
+                             </div>
+                           </div>
+                           
+                         </div>
+                       </div>
+
+                        
+                          
+                        
+                      </div>
+                    </div>
+
+               </div>
+             </div>
+           </div>
+         </div>  
+
+
           
-            
-              <h4>{{ user.household.name }}</h4><br>
-              <h4>Household Members:</h4><br>
-              <button class="btn-pill btn-pill-sm edit-button" data-toggle="modal" data-target="#householdUpdateModal" >Edit Household</button>
-              
-      </div>
-              <!-- <div class="card-footer text-muted">
-              </div> -->
-    </div> 
     
+       
+
+        
+ 
 
 
-    <!-- User without Household -->
-    <div v-if="!user.household">
-      <div class="container">
-       <div class="row">
-        <div class="card col-md-12 text-center w-75">
-          <h5 class="card-header">
-          </h5>
-          <div class="card-body">
-            <button type="submit" class="btn-pill btn-pill-sm btn1" data-toggle="modal" data-target="#householdCreateModal">Create A Household</button> </div>
-            <!-- <div class="card-footer text-muted">
-            </div> -->
-          </div> 
-        </div>
-      </div>
-   </div> 
 
-   <button class="btn-pill btn-pill-sm float-right delete-button" v-on:click="destroyUser()">Delete My Profile</button><br> 
+
+    
 
 
 
@@ -123,7 +215,7 @@
               </h1>
               <div class="form-group">
                 <label>Name</label>
-                <input type="text" class="form-control" v-model="user.household.name">
+                <input v-if="user.household" type="text" class="form-control" v-model="user.household.name">
               </div>
               <div class="form-group">
                 <label>Add Member(s)</label>
@@ -133,7 +225,7 @@
                 <button type="submit" class="btn-shadow btn-shadow-dark">Update Household</button>
               </div>
             </form>
-            <button class="btn-shadow btn-shadow-sm btn3 float-right" v-on:click="destroyHousehold()">Delete Household</button>
+            <button class="btn-shadow btn-shadow-sm button-delete float-right" v-on:click="destroyHousehold()">Delete Household</button>
           </div>
         </div>
       </div>
@@ -184,6 +276,56 @@
   background-color: #ffffff;
   font-weight: bold;
 }
+/*Homepage link */
+.account-page .breadcrumb-item a {
+  color: #4b0082;
+}
+
+/*Padding above cards*/
+.account-page .tab-content {
+  padding: 0px 10px;
+}
+
+/*Household Card*/
+
+.clearfix {
+  background-color: #e3efea;
+}
+
+/*Title*/
+#checkout-cart-summary .line-items .item .details {
+  float: center;
+  margin-left: 15px;
+  margin-top: 12px;
+  max-width: 400px;
+}
+
+#checkout-cart-summary .clearfix h3 {
+  font-size: 22px;
+  padding: 15px 30px;
+  border-bottom: none;
+}
+
+/*Items*/
+#checkout-cart-summary .line-items .item .price {
+  margin-top: 12px;
+  font-weight: 500;
+  font-size: 20px;
+  color: #4b0082;
+}
+
+/*buttons*/
+.button-main {
+  background-color: #4682b4;
+}
+
+.button-modal {
+  background-color: #66cdaa;
+}
+
+.button-delete {
+  background-color: #5f9ea0;
+}
 </style>
 
 
@@ -204,6 +346,7 @@ export default {
     axios.get("/api/users/me").then(response => {
       console.log(response.data);
       this.user = response.data;
+      this.household = response.data.household;
     });
   },
   methods: {
@@ -229,6 +372,8 @@ export default {
     destroyUser: function() {
       axios.delete("/api/users/me").then(response => {
         console.log("Success!", response.data);
+        delete axios.defaults.headers.common["Authorization"];
+        localStorage.removeItem("jwt");
         this.$router.push("/");
       });
     },

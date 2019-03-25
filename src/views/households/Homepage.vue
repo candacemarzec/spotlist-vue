@@ -20,8 +20,8 @@
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
         <p class="m-md-0">
         </p>
-        <button href="#" class="btn-pill btn-pill-lg create-button" data-toggle="modal" data-target="#createListModal">
-          Make A List
+        <button href="#" class="btn-pill btn-pill-lg button-main" data-toggle="modal" data-target="#createListModal">
+          Add A List
         </button>
         <p class="m-0">
         </p>
@@ -33,14 +33,15 @@
     <div class="event-tickets">
       <div class="container">
         <div class="row">
-          <div v-for="list in household.lists" class="col-md-6">
+          <div v-for="list in household.lists" class="col-md-4">
             <div class="ticket">
               <p class="ticket-title">
-                <i data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)" class="fa fa-pencil float-right"></i><br>
+                <i class="icon-edit float-right" data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)"></i><br>
+                <!-- <i data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)" class="fa fa-pencil float-right"></i><br> -->
                 {{ list.store_name }} 
               </p>
               <div class="text-center pb-4 mb-4">
-                <a href="#" class="btn-pill btn-pill-sm create-button" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
+                <a href="#" class="btn-pill btn-pill-sm button-main" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
                   Add Item
                 </a>
               </div>
@@ -55,39 +56,43 @@
                     <h5 class="mb-0">
                       <div class="form-check-inline float-right">
                         <label class="form-check-label">
-                           <input type="radio" class="form-check-input" v-on:click="destroyItem(item, list)"/>
+                           <i class="fa fa-remove" v-on:click="destroyItem(item, list)"></i>
                         </label>
                       </div>
-                      <a class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
+                      <!-- Was <a> - change back from <div> if not working on mobile -->
+                      <div class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
                           {{ item.name }}  
-                      </a>
+                      </div> 
                     </h5>
                   </div>
 
                   <div :id="'collapse' + item.id" class="collapse" role="tabpanel">
                     <div class="card-body">
-                      <button type="button" class="btn-pill btn-pill-sm edit-button float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
-                        Edit
-                      </button> 
                       <div v-if="item.need_by_date">
-                        {{ calendarDate(item.need_by_date) }}
-                      </div>
+                        <b>Need by: </b> {{ calendarDate(item.need_by_date) }}
+                      </div><br>
                         <p>{{ item.coupon_url }}</p>
-                      <div class="col-md-6 mt-3 pt-2">
+                    
+                      <div class="col-md-10 mt-3 pt-2">
                         <div class="view z-depth-1">
                           <img :src="item.image_url" alt="" class="img-fluid">
                         </div> 
-                      </div>
+                      </div><br>
+
+                      <button type="button" class="btn-pill btn-pill-sm button-modal float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
+                       Edit
+                      </button><br>
+                
                     </div>
                   </div>
                 </div>
               </div><br>
               
-              <div class="card-footer note-footer">
-                <h4>Notes:</h4>
+              <div class="card-footer note-footer text-center">
+                <h5>Notes</h5>
                 <textarea type="text" class= "form-control card-footer textarea" v-model="list.notes"></textarea>
               </div><br>
-                <button class="btn-pill btn-pill-sm delete-button float-right" v-on:click="destroyList(list)">Delete List</button><br>
+                <button class="btn-pill btn-pill-sm button-delete float-right" v-on:click="destroyList(list)">Delete List</button><br>
 
             </div>
           </div>
@@ -282,7 +287,7 @@
 </template>
 
 
-<style>
+<style scoped>
 .career-post-header {
   min-height: 350px;
   position: relative;
@@ -291,12 +296,21 @@
   background-image: url(/images/unsplash/evie-calder-857249-unsplash.jpg);
 }
 
+.households-homepage {
+  background-color: #d4e6df;
+}
 .event-tickets .ticket {
   background: #ffffff;
   border-style: solid;
   border-color: #d3d3d3;
   border-width: thin;
   border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.event-tickets h5 {
+  margin-top: 25px; /*accordion card margin*/
 }
 
 .event-tickets .ticket-title {
@@ -304,21 +318,28 @@
 }
 
 .tickets-container {
-  background: #white;
+  background: #ffffff;
 }
 
 /* Style the buttons that are used to open and close the accordion panel */
-.accordion {
+#accordion {
   background-color: #ffffff;
-  color: #ffffff;
+  color: #626567;
   cursor: pointer;
   padding: 0px;
   width: 100%;
+  max-height: 200px;
   text-align: left;
   text-indent: 25px;
   border: none;
   outline: none;
   transition: 0.4s;
+  overflow-y: scroll;
+}
+
+.card-header:first-child {
+  background-color: #ffffff;
+  padding: 0px;
 }
 
 /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
@@ -329,42 +350,45 @@
 
 /* Style the accordion panel. Note: hidden by default */
 .panel {
-  padding: 0 18px;
-  background-color: white;
+  padding: 0 10px;
+  background-color: #ffffff;
   display: none;
   overflow: hidden;
 }
 
+/*Accordion text*/
 .collapsed {
   color: #626567;
 }
 
+/*Notes*/
 .note-footer {
   background: #ffffff;
-  color: #626567;
+  color: #800080;
 }
 
 .textarea {
   width: 100%;
-  height: 150px;
+  max-height: 75px;
   padding: 12px 20px;
   box-sizing: border-box;
   border: none;
   border-radius: 4px;
   background-color: #ffffff;
+  overflow: scroll;
   resize: none;
 }
 /*buttons*/
-.create-button {
+.button-main {
   background-color: #4682b4;
 }
 
-.edit-button {
+.button-modal {
   background-color: #66cdaa;
 }
 
-.delete-button {
-  background-color: #556b2f;
+.button-delete {
+  background-color: #5f9ea0;
 }
 </style>
 

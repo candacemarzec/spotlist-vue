@@ -1,116 +1,405 @@
 <template>
   <div class="lists-homepage">
 
-    <h1>Spotlist</h1>  
+    <!-- Image -->
+       <div class="career-post-header">    
+         <section class="container">
+           <div class="row">
+             <div class="col-12">
+               <h1 class="display-3">
+                 <!-- {{ user.first_name }}'s Lists -->
+               </h1>
+             </div>
+           </div>
+         </section>
+       </div><br>
 
-    <h2>My Lists</h2>
+   <!-- Create List Button  -->
+       <div class="tickets container">
+         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+           <p class="m-md-0">
+           </p>
+           <button href="#" class="btn-pill btn-pill-lg button-main" data-toggle="modal" data-target="#createListModal">
+             Add A List
+           </button>
+           <p class="m-0">
+           </p>
+         </div>
+       </div>
 
-    <div>
-      <form v-on:submit.prevent="createList()">
-        <h2>New List</h2>
-        <ul>
-          <li class="text-danger" v-for="error in errors">{{ error }}</li>
-        </ul>
-        <div class="form-group">
-          <label>Store Name: </label> 
-          <input type="text" class="form-control" v-model="newListStoreName"><br>
-          <label>Notes: </label>
-          <textarea v-model="newListNotes"></textarea><br>
-        </div>
-        <input type="submit" value="Add List">
-      </form>
-    </div>  
-
-
-
-    <div v-for="list in lists">
-      <h2>{{ list.store_name }}</h2>
-      <p>Notes: {{ list.notes }}</p>
-
-
-
-      <form v-on:submit.prevent="updateList(list)">
-        <h2>Edit List</h2>
-        <ul>
-          <li class="text-danger" v-for="error in errors">{{ error }}</li>
-        </ul>
-        <div class="form-group">
-          <label>Store Name: </label>
-          <input type="text" class="form-control" v-model="list.store_name"><br>
-          <label>Notes: </label>
-          <textarea class="form-control" v-model="list.notes"></textarea><br> 
-          <input type="submit" value="Update List">        
-        </div>
-      </form>
-
-      <button v-on:click="destroyList(list)">Delete List</button><br>  
-
-
-      <div>
-        <form v-on:submit.prevent="createItem(list)">
-          <h2>New Item</h2>
-          <ul>
-            <li class="text-danger" v-for="error in errors">{{ error }}</li>
-          </ul>
-          <div class="form-group">
-            <label>Name: </label>
-            <input type="text" class="form-control" v-model="newItemName"><br>
-            <label>Coupon: </label>
-            <input type="text" class="form-control" v-model="newItemCouponUrl"><br>
-            <label>Image: </label>
-            <input type="text" class="form-control" v-model="newItemImageUrl"><br>
-            <label>Need by: </label>
-            <input type="text" class="form-control" v-model="newItemNeedByDate"><br>
-            <input type="submit" value="Add New Item">
-          </div> 
-
-        </form>
+       <!-- Card -->
+       <div class="event-tickets">
+         <div class="container">
+           <div class="row">
+             <div v-for="list in lists" class="col-md-4">
+               <div class="ticket">
+                 <p class="ticket-title">
+                   <i class="icon-edit float-right" data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)"></i><br>
+                   <!-- <i data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)" class="fa fa-pencil float-right"></i><br> -->
+                   {{ list.store_name }} 
+                 </p>
+                 <div class="text-center pb-4 mb-4">
+                   <a href="#" class="btn-pill btn-pill-sm button-main" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
+                     Add Item
+                   </a>
+                 </div>
+                 <hr>
 
 
-        <div v-for="item in list.items">
-          <p>{{ item.name }}</p>
-          <p>{{ item.coupon_url }}</p>
-          <p>{{ item.image_url }}</p>
-          <p>{{ item.need_by_date }}</p>
+           <!-- Accordion -->
+           
+                 <div id="accordion">
+                   <div v-for="item in list.items" class="card">
+                     <div class="card-header accordion" :id="'heading' + item.id" >
+                       <h5 class="mb-0">
+                         <div class="form-check-inline float-right">
+                           <label class="form-check-label">
+                              <i class="fa fa-remove" v-on:click="destroyItem(item, list)"></i>
+                           </label>
+                         </div>
+                         <!-- Was <a> - change back from <div> if not working on mobile -->
+                         <div class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
+                             {{ item.name }}  
+                         </div> 
+                       </h5>
+                     </div>
+
+                     <div :id="'collapse' + item.id" class="collapse" role="tabpanel">
+                       <div class="card-body">
+                         <div v-if="item.need_by_date">
+                           <b>Need by: </b> {{ calendarDate(item.need_by_date) }}
+                         </div><br>
+                           <p>{{ item.coupon_url }}</p>
+                       
+                         <div class="col-md-10 mt-3 pt-2">
+                           <div class="view z-depth-1">
+                             <img :src="item.image_url" alt="" class="img-fluid">
+                           </div> 
+                         </div><br>
+
+                         <button type="button" class="btn-pill btn-pill-sm button-modal float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
+                          Edit
+                         </button><br>
+                   
+                       </div>
+                     </div>
+                   </div>
+                 </div><br>
+                 
+                 <div class="card-footer note-footer text-center">
+                   <h5>Notes</h5>
+                   <textarea type="text" class= "form-control card-footer textarea" v-model="list.notes"></textarea>
+                 </div><br>
+                   <button class="btn-pill btn-pill-sm button-delete float-right" v-on:click="destroyList(list)">Delete List</button><br>
+
+               </div>
+             </div>
+           </div>
+         </div>
+       </div>
 
 
-          <div>
-            <form v-on:submit.prevent="updateItem(item)">
-              <h2>Edit Item</h2>
+
+
+       <!-- New List Modal -->
+       <!--  <button type="button" class="btn-pill btn-pill-primary" data-toggle="modal" data-target="#createListModal">
+          Create A List
+        </button> -->
+
+       <div class="modal fade" id="createListModal" tabindex="-1" role="dialog">
+         <div class="modal-dialog" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">×</span>
+               </button>
+             </div>
+             <div class="modal-body">
+               <ul>
+                 <li class="text-danger" v-for="error in errors">{{ error }}</li>
+               </ul>
+               <form class="ecommerce-sign-up-form" v-on:submit.prevent="createList()">
+                  <h1>
+                    New List
+                  </h1>
+                  <div class="form-group">
+                    <label>Store Name</label>
+                    <input type="text" class="form-control" v-model="newListStoreName">
+                  </div>
+                  <div class="form-group">
+                    <label>Notes</label>
+                    <textarea type="text" class="form-control" v-model="newListNotes"></textarea>
+                  </div>
+                  <div class="form-action">
+                    <button type="submit" class="btn-shadow btn-shadow-dark">Add List</button>
+                  </div>
+               </form>
+             </div>
+           </div>
+         </div>
+       </div>
+
+
+
+       <!--  Update List Modal -->
+       <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateListModal">
+         Edit List
+       </button> -->
+
+       <div class="modal fade" id="updateListModal" tabindex="-1" role="dialog">
+         <div class="modal-dialog" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">×</span>
+               </button>
+             </div>
+             <div class="modal-body">
+               <ul>
+                 <li class="text-danger" v-for="error in errors">{{ error }}</li>
+               </ul>
+               <form class="ecommerce-sign-up-form" v-on:submit.prevent="updateList(currentList)">
+                <h1>
+                  Edit {{ currentList.store_name }} List
+                </h1>
+                <div class="form-group">
+                  <label>Store Name</label>
+                  <input type="text" class="form-control" v-model="currentList.store_name">
+                </div>
+                <div class="form-group">
+                  <label>Notes</label>
+                  <textarea type="text" class="form-control" v-model="currentList.notes"></textarea>
+                </div>
+                <div class="form-action">
+                  <button type="submit" class="btn-shadow btn-shadow-dark">Update</button>
+                </div>
+               </form>
+             </div>
+           </div>
+         </div>
+       </div>
+
+
+
+      <!--  Create Item Modal  -->
+      <!-- <button type="button" class="btn btn-primary btn-shadow-sm" data-toggle="modal" data-target="#createItemModal">
+        Add Item
+      </button> -->
+
+      <div class="modal fade" id="createItemModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
               <ul>
                 <li class="text-danger" v-for="error in errors">{{ error }}</li>
               </ul>
-              <div class="form-group">
-                <label>Name: </label>
-                <input type="text" class="form-control" v-model="item.name"><br>
-                <label>Coupon: </label>
-                <input type="text" class="form-control" v-model="item.coupon_url"><br>
-                <label>Image: </label> 
-                <input type="text" class="form-control" v-model="item.image_url"><br> 
-                <label>Need by: </label> 
-                <input type="text" class="form-control" v-model="item.need_by_date"><br> 
-                <input type="submit" value="Edit Item">
-              </div>
-              
-            </form> 
-            <button v-on:click="destroyItem(item, list)">Delete Item</button><br> 
+              <form class="ecommerce-sign-up-form" v-on:submit.prevent="createItem(currentList)">
+                 <h1>
+                   Add Item
+                 </h1>
+                 <div class="form-group">
+                   <label>Name</label>
+                   <input type="text" class="form-control" v-model="newItemName">
+                 </div>
+                 <div class="form-group">
+                   <label>Coupon</label>
+                   <input type="text" class="form-control" v-model="newItemCouponUrl">
+                 </div>
+                 <div class="form-group">
+                   <label>Image</label>
+                   <input type="text" class="form-control" v-model="newItemImageUrl">
+                 </div>
+                 <div class="form-group">
+                   <label>Need by date</label>
+                   <input type="date" class="form-control" v-model="newItemNeedByDate">
+                 </div>             
+                 <div class="form-action">
+                   <button type="submit" class="btn-shadow btn-shadow-dark">Add Item to List</button>
+                 </div>
+              </form>
+            </div>
           </div>
         </div>
+      </div> 
 
-      </div>      
-    </div>
+
+
+        <!-- Update Item Modal --> 
+      <!-- <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal" data-target="#updateItemModal">
+        Edit Item
+      </button> -->
+
+      <div class="modal fade" id="updateItemModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <ul>
+                <li class="text-danger" v-for="error in errors">{{ error }}</li>
+              </ul>
+              <form class="ecommerce-sign-up-form" v-on:submit.prevent="updateItem(currentItem)">
+                 <h1>
+                   Edit {{ currentItem.name }}
+                 </h1>
+                 <div class="form-group">
+                   <label>Name</label>
+                   <input type="text" class="form-control" v-model="currentItem.name">
+                 </div>
+                 <div class="form-group">
+                   <label>Coupon</label>
+                   <input type="text" class="form-control" v-model="currentItem.coupon_url">
+                 </div>
+                 <div class="form-group">
+                   <label>Image</label>
+                   <input type="text" class="form-control" v-model="currentItem.image_url">
+                 </div>
+                 <div class="form-group">
+                   <label>Need by date</label>
+                   <input type="date" class="form-control" v-model="currentItem.need_by_date">
+                 </div>             
+                 <div class="form-action">
+                   <button type="submit" class="btn-shadow btn-shadow-dark">Update Item</button>
+                 </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
   </div>
 </template>
 
 
+
+<style scoped>
+.career-post-header {
+  min-height: 350px;
+  position: relative;
+  background-size: cover;
+  background-position: center top;
+  background-image: url(/images/unsplash/evie-calder-857249-unsplash.jpg);
+}
+
+.lists-homepage {
+  background-color: #d4e6df;
+}
+.event-tickets .ticket {
+  background: #ffffff;
+  border-style: solid;
+  border-color: #d3d3d3;
+  border-width: thin;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.event-tickets h5 {
+  margin-top: 25px; /*accordion card margin*/
+}
+
+.event-tickets .ticket-title {
+  color: #626567;
+}
+
+.tickets-container {
+  background: #ffffff;
+}
+
+/* Style the buttons that are used to open and close the accordion panel */
+#accordion {
+  background-color: #ffffff;
+  color: #626567;
+  cursor: pointer;
+  padding: 0px;
+  width: 100%;
+  max-height: 200px;
+  text-align: left;
+  text-indent: 25px;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+  overflow-y: scroll;
+}
+
+.card-header:first-child {
+  background-color: #ffffff;
+  padding: 0px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active-panel,
+.accordion:hover {
+  background-color: #f5f5f5;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 0 10px;
+  background-color: #ffffff;
+  display: none;
+  overflow: hidden;
+}
+
+/*Accordion text*/
+.collapsed {
+  color: #626567;
+}
+
+/*Notes*/
+.note-footer {
+  background: #ffffff;
+  color: #800080;
+}
+
+.textarea {
+  width: 100%;
+  max-height: 75px;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffffff;
+  overflow: scroll;
+  resize: none;
+}
+/*buttons*/
+.button-main {
+  background-color: #4682b4;
+}
+
+.button-modal {
+  background-color: #66cdaa;
+}
+
+.button-delete {
+  background-color: #5f9ea0;
+}
+</style>
+
+
+
 <script>
+/* global $ */
 var axios = require("axios");
+import moment from "moment";
 
 export default {
   data: function() {
     return {
+      user: {},
       lists: [],
+      currentList: {},
+      currentItem: {},
       newListStoreName: "",
       newListNotes: "",
       newItemName: "",
@@ -136,6 +425,7 @@ export default {
         .post("/api/lists", listParams)
         .then(response => {
           console.log("Success!", response.data);
+          $("#createListModal").modal("hide");
           this.lists.push(response.data);
         })
         .catch(error => {
@@ -143,7 +433,9 @@ export default {
           this.status = error.response.status;
         });
     },
-
+    setCurrentList: function(list) {
+      this.currentList = list;
+    },
     updateList: function(list) {
       console.log(list);
       var listParams = {
@@ -154,6 +446,7 @@ export default {
         .patch("/api/lists/" + list.id, listParams)
         .then(response => {
           console.log("Success!", response.data);
+          $("#updateListModal").modal("hide");
           this.lists.push(response.data);
         })
         .catch(error => {
@@ -183,6 +476,7 @@ export default {
         .post("/api/items", itemParams)
         .then(response => {
           console.log("Success!", response.data);
+          $("#createItemModal").modal("hide");
           list.items.push(response.data);
         })
         .catch(error => {
@@ -190,7 +484,9 @@ export default {
           this.status = error.response.status;
         });
     },
-
+    setCurrentItem: function(item) {
+      this.currentItem = item;
+    },
     updateItem: function(item) {
       var itemParams = {
         name: item.name,
@@ -202,6 +498,7 @@ export default {
         .patch("/api/items/" + item.id, itemParams)
         .then(response => {
           console.log("Success!", response.data);
+          $("#updateItemModal").modal("hide");
         })
         .catch(error => {
           this.errors = error.response.data.errors;
@@ -214,6 +511,9 @@ export default {
         var index = list.items.indexOf(item);
         list.items.splice(index, 1);
       });
+    },
+    calendarDate: function(date) {
+      return moment(date).format("MM/DD/YYYY");
     }
   }
 };
