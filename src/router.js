@@ -7,8 +7,8 @@ import Login from './views/Login.vue';
 import Logout from './views/Logout.vue';
 import Profile from './views/users/Profile.vue';
 
-import Homepage from './views/households/Homepage.vue';
-import HomePage from './views/lists/HomePage.vue';
+import HouseLists from './views/households/HouseLists.vue';
+import ListsHome from './views/lists/ListsHome.vue';
 
 
 
@@ -50,13 +50,13 @@ export default new Router({
     },
     {
       path: '/household',
-      name: 'homepage',
-      component: Homepage
+      name: 'house-lists',
+      component: HouseLists
     },
     {
       path: '/lists',
-      name: 'list-homepage',
-      component: HomePage
+      name: 'list-home',
+      component: ListsHome
     }
   ]
 });

@@ -1,5 +1,5 @@
 <template>
-  <div class="households-homepage">
+  <div class="house-lists">
 
  <!-- Image -->
     <div class="career-post-header">    
@@ -36,8 +36,8 @@
           <div v-for="list in household.lists" class="col-md-4">
             <div class="ticket">
               <p class="ticket-title">
+                <span v-if="justAdded(list)" class="badge badge-info float-left">New</span>
                 <i class="icon-edit float-right" data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)"></i><br>
-                <!-- <i data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)" class="fa fa-pencil float-right"></i><br> -->
                 {{ list.store_name }} 
               </p>
               <div class="text-center pb-4 mb-4">
@@ -61,36 +61,38 @@
                       </div>
                       <!-- Was <a> - change back from <div> if not working on mobile -->
                       <div class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
-                          {{ item.name }}  
+                        <span v-if="isNew(item)" class="badge badge-info">New</span>
+                          {{ item.quantity}} {{ item.name }} 
                       </div> 
                     </h5>
                   </div>
 
                   <div :id="'collapse' + item.id" class="collapse" role="tabpanel">
                     <div class="card-body">
-                      <div v-if="item.need_by_date">
+                       <button type="button" class="btn-pill btn-pill-sm button-modal float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
+                        Edit
+                       </button><br>
+
+                       <div v-if="item.need_by_date">
                         <b>Need by: </b> {{ calendarDate(item.need_by_date) }}
-                      </div><br>
+                       </div><br>
+                       
                         <p>{{ item.coupon_url }}</p>
-                    
                       <div class="col-md-10 mt-3 pt-2">
                         <div class="view z-depth-1">
                           <img :src="item.image_url" alt="" class="img-fluid">
                         </div> 
-                      </div><br>
-
-                      <button type="button" class="btn-pill btn-pill-sm button-modal float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
-                       Edit
-                      </button><br>
-                
+                      </div>
                     </div>
                   </div>
                 </div>
               </div><br>
               
               <div class="card-footer note-footer text-center">
-                <h5>Notes</h5>
-                <textarea type="text" class= "form-control card-footer textarea" v-model="list.notes"></textarea>
+                <div v-if="list.notes">
+                  <h5>Notes</h5>
+                  <textarea type="text" class= "form-control card-footer textarea" v-model="list.notes"></textarea>
+                </div>
               </div><br>
                 <button class="btn-pill btn-pill-sm button-delete float-right" v-on:click="destroyList(list)">Delete List</button><br>
 
@@ -213,6 +215,10 @@
                  <input type="text" class="form-control" v-model="newItemName">
                </div>
                <div class="form-group">
+                 <label>Qty</label>
+                 <input type="text" class="form-control" v-model="newItemQuantity">
+               </div> 
+               <div class="form-group">
                  <label>Coupon</label>
                  <input type="text" class="form-control" v-model="newItemCouponUrl">
                </div>
@@ -262,6 +268,10 @@
                  <input type="text" class="form-control" v-model="currentItem.name">
                </div>
                <div class="form-group">
+                 <label>Quantity</label>
+                 <input type="text" class="form-control" v-model="currentItem.quantity">
+               </div> 
+               <div class="form-group">
                  <label>Coupon</label>
                  <input type="text" class="form-control" v-model="currentItem.coupon_url">
                </div>
@@ -296,8 +306,8 @@
   background-image: url(/images/unsplash/evie-calder-857249-unsplash.jpg);
 }
 
-.households-homepage {
-  background-color: #d4e6df;
+.house-lists {
+  background-color: #e2ecec;
 }
 .event-tickets .ticket {
   background: #ffffff;
@@ -330,7 +340,7 @@
   width: 100%;
   max-height: 200px;
   text-align: left;
-  text-indent: 25px;
+  text-indent: 10px;
   border: none;
   outline: none;
   transition: 0.4s;
@@ -378,6 +388,12 @@
   overflow: scroll;
   resize: none;
 }
+
+/*footer*/
+#footer {
+  margin-top: 0;
+}
+
 /*buttons*/
 .button-main {
   background-color: #4682b4;
@@ -412,6 +428,7 @@ export default {
       newItemCouponUrl: "",
       newItemImageUrl: "",
       newItemNeedByDate: "",
+      newItemQuantity: "",
       errors: []
     };
   },
@@ -419,6 +436,7 @@ export default {
     axios.get("/api/household").then(response => {
       console.log(response.data);
       this.household = response.data;
+      console.log();
     });
   },
   methods: {
@@ -494,6 +512,7 @@ export default {
         coupon_url: this.newItemCouponUrl,
         image_url: this.newItemImageUrl,
         need_by_date: this.newItemNeedByDate,
+        quantity: this.newItemQuantity,
         list_id: list.id
       };
       axios
@@ -508,6 +527,7 @@ export default {
           this.status = error.response.status;
         });
     },
+
     setCurrentItem: function(item) {
       this.currentItem = item;
     },
@@ -516,7 +536,8 @@ export default {
         name: item.name,
         coupon_url: item.coupon_url,
         image_url: item.image_url,
-        need_by_date: item.need_by_date
+        need_by_date: item.need_by_date,
+        quantity: item.quantity
       };
       axios
         .patch("/api/items/" + item.id, itemParams)
@@ -538,6 +559,12 @@ export default {
     },
     calendarDate: function(date) {
       return moment(date).format("MM/DD/YYYY");
+    },
+    isNew: function(item) {
+      return moment(item.created_at).isAfter(moment().subtract(10, "minutes"));
+    },
+    justAdded: function(list) {
+      return moment(list.created_at).isAfter(moment().subtract(10, "minutes"));
     }
   }
 };

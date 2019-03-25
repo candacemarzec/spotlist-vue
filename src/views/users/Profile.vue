@@ -27,13 +27,6 @@
           <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="profile">
               <div class="row profile-form">
-                <!-- <div class="col-md-3">
-                  <img src="../images/uifaces/10.jpg" class="avatar" />
-                  <a href="#" class="btn-upload-avatar">
-                    Upload new avatar
-                  </a>
-                </div> -->
-                
               </div>
             </div>
             
@@ -110,7 +103,9 @@
                                 </span>
                               </div>
                               <div class="price float-right">
-                                  <!-- Member Names -->
+                                 <h5 v-for="userFullName in user.household.members">
+                                   <li>{{ userFullName }}</li>
+                                 </h5>
                               </div>
                           </div>
                         </div>
@@ -122,6 +117,9 @@
            </div>
          </div>
         </div>  
+
+
+
 
 
          <!-- User without Household -->
@@ -219,7 +217,7 @@
               </div>
               <div class="form-group">
                 <label>Add Member(s)</label>
-                <input type="text" class="form-control" >
+                <input v-model="newMemberEmail" type="text" class="form-control" >
               </div>
               <div class="form-action">
                 <button type="submit" class="btn-shadow btn-shadow-dark">Update Household</button>
@@ -289,7 +287,7 @@
 /*Household Card*/
 
 .clearfix {
-  background-color: #e3efea;
+  background-color: #e2ecec;
 }
 
 /*Title*/
@@ -339,6 +337,7 @@ export default {
       user: {},
       household: {},
       newHouseholdName: "",
+      newMemberEmail: "",
       errors: []
     };
   },
@@ -395,7 +394,9 @@ export default {
       var householdParams = {
         name: this.user.household.name
       };
-
+      if (this.newMemberEmail) {
+        householdParams.new_member_email = this.newMemberEmail;
+      }
       axios
         .patch("/api/households/" + this.household.id, householdParams)
         .then(response => {
