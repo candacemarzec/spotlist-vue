@@ -7,7 +7,7 @@
            <div class="row">
              <div class="col-12">
                <h1 class="display-3">
-                 <!-- {{ user.first_name }}'s Lists -->
+                 My Lists
                </h1>
              </div>
            </div>
@@ -141,43 +141,43 @@
 
 
 
-       <!--  Update List Modal -->
-       <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateListModal">
-         Edit List
-       </button> -->
+    <!--  Update List Modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateListModal">
+      Edit List
+    </button> -->
 
-       <div class="modal fade" id="updateListModal" tabindex="-1" role="dialog">
-         <div class="modal-dialog" role="document">
-           <div class="modal-content">
-             <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                 <span aria-hidden="true">×</span>
-               </button>
+    <div class="modal fade" id="updateListModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <ul>
+              <li class="text-danger" v-for="error in errors">{{ error }}</li>
+            </ul>
+            <form class="ecommerce-sign-up-form" v-on:submit.prevent="updateList(currentList)">
+             <h1>
+               Edit {{ currentList.store_name }} List
+             </h1>
+             <div class="form-group">
+               <label>Store Name</label>
+               <input type="text" class="form-control" v-model="currentList.store_name">
              </div>
-             <div class="modal-body">
-               <ul>
-                 <li class="text-danger" v-for="error in errors">{{ error }}</li>
-               </ul>
-               <form class="ecommerce-sign-up-form" v-on:submit.prevent="updateList(currentList)">
-                <h1>
-                  Edit {{ currentList.store_name }} List
-                </h1>
-                <div class="form-group">
-                  <label>Store Name</label>
-                  <input type="text" class="form-control" v-model="currentList.store_name">
-                </div>
-                <div class="form-group">
-                  <label>Notes</label>
-                  <textarea type="text" class="form-control" v-model="currentList.notes"></textarea>
-                </div>
-                <div class="form-action">
-                  <button type="submit" class="btn-shadow btn-shadow-dark">Update</button>
-                </div>
-               </form>
+             <div class="form-group">
+               <label>Notes</label>
+               <textarea type="text" class="form-control" v-model="currentList.notes"></textarea>
              </div>
-           </div>
-         </div>
-       </div>
+             <div class="form-action">
+               <button type="submit" class="btn-shadow btn-shadow-dark">Update</button>
+             </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 
@@ -286,8 +286,8 @@
   min-height: 350px;
   position: relative;
   background-size: cover;
-  background-position: center top;
-  background-image: url(/images/unsplash/evie-calder-857249-unsplash.jpg);
+  background-position: center;
+  background-image: url(/images/unsplash/stefano-alemani-1260480-unsplash.jpg);
 }
 
 .lists-homepage {
@@ -447,7 +447,7 @@ export default {
         .then(response => {
           console.log("Success!", response.data);
           $("#updateListModal").modal("hide");
-          this.lists.push(response.data);
+          this.list = response.data;
         })
         .catch(error => {
           this.errors = error.response.data.errors;
