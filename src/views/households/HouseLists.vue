@@ -27,6 +27,10 @@
         </p>
       </div>
     </div>
+
+    
+      
+    
  
 
     <!-- Card -->
@@ -38,7 +42,7 @@
               <p class="ticket-title">
                 <span v-if="justAdded(list)" class="badge badge-info float-left">New</span>
                 <i class="icon-edit float-right" data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)"></i><br>
-                {{ list.store_name }} 
+                {{ list.store_name }} <!-- {{ list.user }} --> 
               </p>
               <div class="text-center pb-4 mb-4">
                 <a href="#" class="btn-pill btn-pill-sm button-main" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
@@ -98,6 +102,7 @@
 
             </div>
           </div>
+            
         </div>
       </div>
     </div>
