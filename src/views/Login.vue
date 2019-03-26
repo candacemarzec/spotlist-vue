@@ -27,11 +27,11 @@
                 </label>
               </div>
               <div class="form-action">
-                <button type="submit" class="btn-shadow btn-shadow-dark">Sign in</button>
+                <button type="submit" class="btn-pill btn pill-lg button-modal">Log in</button>
               </div>
               <div class="form-bottom">
-                <a href="sign-up.html" class="btn-forgot-password">Forgot your password?</a>
-                Don't have an account yet? <a href="/users/new">Sign up</a>
+                <!-- <router-link v-bind:="'sign-up.html'" class="btn-forgot-password">Forgot your password?</router-link > -->
+                Don't have an account yet? <router-link v-bind:to="'/users/new'">Sign up</router-link>
               </div>
             </form>
           </div>
@@ -46,6 +46,9 @@
 </template>
 
 <style>
+.button-modal {
+  background-color: #442f69;
+}
 </style>
 
 

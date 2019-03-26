@@ -29,8 +29,6 @@
     </div>
 
     
-      
-    
  
 
     <!-- Card -->
@@ -66,14 +64,15 @@
                       <!-- Was <a> - change back from <div> if not working on mobile -->
                       <div class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
                         <span v-if="isNew(item)" class="badge badge-info">New</span>
-                          {{ item.quantity }} {{ item.name }} <!-- {{ item.user }} -->
+                          {{ item.quantity }} {{ item.name }} {{ item.first_name }}
+
                       </div> 
                     </h5>
                   </div>
 
                   <div :id="'collapse' + item.id" class="collapse" role="tabpanel">
                     <div class="card-body">
-                       <button type="button" class="btn-pill btn-pill-sm button-modal float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
+                       <button type="button" class="btn-pill btn-pill-sm button-edit-item float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
                         Edit
                        </button><br>
 
@@ -142,7 +141,7 @@
                  <textarea type="text" class="form-control" v-model="newListNotes"></textarea>
                </div>
                <div class="form-action">
-                 <button type="submit" class="btn-shadow btn-shadow-dark">Add List</button>
+                 <button type="submit" class="btn-pill btn pill-lg button-modal">Add List</button>
                </div>
             </form>
           </div>
@@ -183,7 +182,7 @@
                <textarea type="text" class="form-control" v-model="currentList.notes"></textarea>
              </div>
              <div class="form-action">
-               <button type="submit" class="btn-shadow btn-shadow-dark">Update</button>
+               <button type="submit" class="btn-pill btn pill-lg button-modal">Update</button>
              </div>
             </form>
           </div>
@@ -237,7 +236,7 @@
                  <input type="date" class="form-control" v-model="newItemNeedByDate">
                </div>             
                <div class="form-action">
-                 <button type="submit" class="btn-shadow btn-shadow-dark">Add Item to List</button>
+                 <button type="submit" class="btn-pill btn pill-lg button-modal">Add Item to List</button>
                </div>
             </form>
           </div>
@@ -290,7 +289,7 @@
                  <input type="date" class="form-control" v-model="currentItem.need_by_date">
                </div>             
                <div class="form-action">
-                 <button type="submit" class="btn-shadow btn-shadow-dark">Update Item</button>
+                 <button type="submit" class="btn-pill btn pill-lg button-modal">Update Item</button>
                </div>
             </form>
           </div>
@@ -400,13 +399,22 @@
   margin-top: 0;
 }
 
+/*badges*/
+.badge-info {
+  background-color: #d5d689;
+}
+
 /*buttons*/
 .button-main {
   background-color: #4682b4;
 }
 
-.button-modal {
+.button-edit-item {
   background-color: #66cdaa;
+}
+
+.button-modal {
+  background-color: #442f69;
 }
 
 .button-delete {

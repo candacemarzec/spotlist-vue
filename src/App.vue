@@ -3,7 +3,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" role="navigation">
       <div class="container no-override">
-        <a class="navbar-brand" href="/">Spotlist</a>
+        <router-link class="navbar-brand" v-bind:to="'/'">Spotlist</router-link>
         <button class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -46,7 +46,7 @@
             </div>
             <ul class="menu">
               <li>
-                <a href="/">Home Page</a>
+                <router-link to="/">Home Page</router-link>
               </li>
             </ul>
           </div>
@@ -100,13 +100,13 @@
                         <label>Password</label>
                         <input type="password" class="form-control" v-model="password">
                       </div>
-                      <div class="checkbox">
+                      <!-- <div class="checkbox">
                         <label>
                           <input type="checkbox"> Remember me
                         </label>
-                      </div>
+                      </div> -->
                       <div class="form-action">
-                        <button type="submit" class="btn-shadow btn-shadow-dark">Sign in</button>
+                        <button type="submit" class="btn-pill btn pill-lg button-modal">Log in</button>
                       </div>
                     </form>
                   </div>
@@ -155,10 +155,10 @@
                 <input type="password" class="form-control" v-model="passwordConfirmation">
               </div>
               <div class="form-action">
-                <button type="submit" class="btn-shadow btn-shadow-dark">Create account</button>
+                <button type="submit" class="btn-pill btn pill-lg button-modal">Create account</button>
               </div>
               <div class="form-bottom">
-                Already have an account? <a href="/login">Sign in</a>
+                Already have an account? <a href="/login">Log in</a>
               </div>
             </form>
           </div>
@@ -173,6 +173,14 @@
 <style>
 .pt-75 {
   padding-top: 75px;
+}
+
+.footer {
+  margin-top: 0px;
+}
+
+.button-modal {
+  background-color: #442f69;
 }
 </style>
 

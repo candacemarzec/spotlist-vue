@@ -34,10 +34,10 @@
                 <input type="password" class="form-control" v-model="passwordConfirmation">
               </div>
               <div class="form-action">
-                <button type="submit" class="btn-shadow btn-shadow-dark">Create account</button>
+                <button type="submit" class="btn-pill btn pill-lg button-modal">Create account</button>
               </div>
               <div class="form-bottom">
-                Already have an account? <a href="/login">Sign in</a>
+                Already have an account? <router-link v-bind:to="'/login'">Log in</router-link>
               </div>
             </form>
           </div>
@@ -50,6 +50,18 @@
 
     </div>
 </template>
+
+
+<style>
+#app,
+.body {
+  background-color: #d8e0e46b;
+}
+
+.button-modal {
+  background-color: #442f69;
+}
+</style>
 
 <script>
 import axios from "axios";

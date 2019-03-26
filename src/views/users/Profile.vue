@@ -6,7 +6,7 @@
       <div class="container">
         <ol class="breadcrumb">
           <li class="breadcrumb-item" v-if="user.household">
-            <a href="/household">Home</a>
+            <router-link v-bind:to="'/household'">Home</router-link>
           </li>  
           <li class="breadcrumb-item homepage" v-if="!user.household"> 
             <a href="/lists">Home</a> 
@@ -17,7 +17,7 @@
         <div class="account-wrapper">
           <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="nav-item">
-              <a class="nav-link active" href="account-profile.html" role="tab">{{ user.first_name}} {{ user.last_name }}</a>
+              <div class="text" role="tab"><h2>{{ user.first_name}} {{ user.last_name }}</h2></div>
             </li>
           </ul>
 
@@ -87,12 +87,13 @@
                         <div class="item clearfix">
                           <div class="details">
                             <span class="name">
-                              <h6>Household Name:</h6>
+                              <h6>Household Name</h6>
+                              <div class="price float-center">
+                                <h6><b>{{ user.household.name }}</b></h6>
+                              </div>
                             </span>
                           </div>
-                          <div class="price float-right">
-                            <b>{{ user.household.name }}</b>
-                          </div>
+                          
                         </div>
                       </div> 
                         <div class="line-items">
@@ -103,9 +104,9 @@
                                 </span>
                               </div>
                               <div class="price float-right">
-                                 <h5 v-for="userFullName in user.household.members">
+                                 <h6 v-for="userFullName in user.household.members">
                                    <li>{{ userFullName }}</li>
-                                 </h5>
+                                 </h6>
                               </div>
                           </div>
                         </div>
@@ -113,9 +114,9 @@
                     </div>
                   </div>
 
-             </div>
-           </div>
-         </div>
+              </div>
+            </div>
+          </div>
         </div>  
 
 
@@ -155,21 +156,18 @@
 
                     <!-- Create Household Card -->
                     <div class="col-md-6">
-                      <div id="checkout-cart-summary" class="clearfix float-right">
+                      <div id="checkout-cart-summary" class="clearfix">
                        <div class="line-items">
                          <div class="item clearfix">
                            <div class="details">
                              <div class="name" >
-                              <h3>Create A Household</h3>
-                              <button type="submit" class="btn-pill btn-pill-sm button-main" data-toggle="modal" data-target="#householdCreateModal">Create A Household</button>  
-                             </div>
+                              fhuneiqrvrgfhbveiruqlabvuerbvlnejbdfbvkalbueivibeaoerbuvujbavbj
+                             </div><br>
+                             <button type="submit" class="btn-pill btn-pill-sm button-main float-right" data-toggle="modal" data-target="#householdCreateModal">Get Started</button>
                            </div>
                            
                          </div>
                        </div>
-
-                        
-                          
                         
                       </div>
                     </div>
@@ -180,17 +178,7 @@
          </div>  
 
 
-          
-    
-       
-
-        
- 
-
-
-
-
-    
+            
 
 
 
@@ -217,10 +205,11 @@
               </div>
               <div class="form-group">
                 <label>Add Member(s)</label>
-                <input v-model="newMemberEmail" type="text" class="form-control" >
+                <input v-model="newMemberEmail" type="email" class="form-control">
+                 <small class="form-text text-muted">Please enter the new member's email</small>
               </div>
               <div class="form-action">
-                <button type="submit" class="btn-shadow btn-shadow-dark">Update Household</button>
+                <button type="submit" class="btn-pill btn pill-lg button-modal">Update Household</button>
               </div>
             </form>
             <button class="btn-shadow btn-shadow-sm button-delete float-right" v-on:click="destroyHousehold()">Delete Household</button>
@@ -253,10 +242,11 @@
               </div>
               <div class="form-group">
                 <label>Add Member(s)</label>
-                <input type="text" class="form-control" >
+                <input type="email" class="form-control form-text text-muted">
+                 <small class="form-text text-muted">Please enter the new member's email</small>
               </div>
               <div class="form-action">
-                <button type="submit" class="btn-shadow btn-shadow-dark">Submit</button>
+                <button type="submit" class="btn-pill btn pill-lg button-modal">Submit</button>
               </div>
             </form>
           </div>
@@ -269,14 +259,14 @@
 </template>
 
 
-<style>
+<style scoped>
 .profile-form {
   background-color: #ffffff;
   font-weight: bold;
 }
 /*Homepage link */
 .account-page .breadcrumb-item a {
-  color: #4b0082;
+  color: #442f69;
 }
 
 /*Padding above cards*/
@@ -287,15 +277,16 @@
 /*Household Card*/
 
 .clearfix {
-  background-color: #e2ecec;
+  background-color: #d8e0e46b;
+  word-wrap: break-word;
 }
 
 /*Title*/
 #checkout-cart-summary .line-items .item .details {
-  float: center;
-  margin-left: 15px;
-  margin-top: 12px;
-  max-width: 400px;
+  float: left;
+  margin-left: 5px;
+  margin-top: 8px;
+  max-width: 360px;
 }
 
 #checkout-cart-summary .clearfix h3 {
@@ -306,10 +297,11 @@
 
 /*Items*/
 #checkout-cart-summary .line-items .item .price {
-  margin-top: 12px;
+  margin-top: 10px;
   font-weight: 500;
   font-size: 20px;
-  color: #4b0082;
+  word-wrap: break-word;
+  color: #442f69;
 }
 
 /*buttons*/
@@ -318,6 +310,10 @@
 }
 
 .button-modal {
+  background-color: #442f69;
+}
+
+.button-edit-item {
   background-color: #66cdaa;
 }
 
