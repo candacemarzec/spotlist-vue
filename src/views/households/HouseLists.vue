@@ -20,7 +20,7 @@
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
         <p class="m-md-0">
         </p>
-        <button href="#" class="btn-pill btn-pill-lg button-main" data-toggle="modal" data-target="#createListModal">
+        <button type="button" class="btn-pill btn-pill-lg button-main" data-toggle="modal" data-target="#createListModal">
           Add A List
         </button>
         <p class="m-0">
@@ -42,12 +42,12 @@
               <p class="ticket-title">
                 <span v-if="justAdded(list)" class="badge badge-info float-left">New</span>
                 <i class="icon-edit float-right" data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)"></i><br>
-                {{ list.store_name }} <!-- {{ list.user }} --> 
+                {{ list.store_name }} {{ list.user }} 
               </p>
               <div class="text-center pb-4 mb-4">
-                <a href="#" class="btn-pill btn-pill-sm button-main" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
+                <button type="button" class="btn-pill btn-pill-sm button-main" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
                   Add Item
-                </a>
+                </button>                 
               </div>
               <hr>
 
@@ -66,7 +66,7 @@
                       <!-- Was <a> - change back from <div> if not working on mobile -->
                       <div class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
                         <span v-if="isNew(item)" class="badge badge-info">New</span>
-                          {{ item.quantity}} {{ item.name }} 
+                          {{ item.quantity}} {{ item.name }} {{ item.user }}
                       </div> 
                     </h5>
                   </div>
@@ -78,10 +78,11 @@
                        </button><br>
 
                        <div v-if="item.need_by_date">
-                        <b>Need by: </b> {{ calendarDate(item.need_by_date) }}
+                        <b>Need by: </b>{{ calendarDate(item.need_by_date) }}
                        </div><br>
                        
-                        <p>{{ item.coupon_url }}</p>
+                      <p>{{ item.coupon_url}}</p>
+
                       <div class="col-md-10 mt-3 pt-2">
                         <div class="view z-depth-1">
                           <img :src="item.image_url" alt="" class="img-fluid">
@@ -325,7 +326,7 @@
 }
 
 .event-tickets h5 {
-  margin-top: 25px; /*accordion card margin*/
+  margin-top: 15px; /*accordion card margin*/
 }
 
 .event-tickets .ticket-title {
@@ -345,7 +346,7 @@
   width: 100%;
   max-height: 200px;
   text-align: left;
-  text-indent: 10px;
+  text-indent: 1px;
   border: none;
   outline: none;
   transition: 0.4s;

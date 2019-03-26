@@ -19,7 +19,7 @@
          <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
            <p class="m-md-0">
            </p>
-           <button href="#" class="btn-pill btn-pill-lg button-main" data-toggle="modal" data-target="#createListModal">
+           <button type="button" class="btn-pill btn-pill-lg button-main" data-toggle="modal" data-target="#createListModal">
              Add A List
            </button>
            <p class="m-0">
@@ -334,7 +334,7 @@
   width: 100%;
   max-height: 200px;
   text-align: left;
-  text-indent: 10px;
+  text-indent: 1px;
   border: none;
   outline: none;
   transition: 0.4s;
