@@ -66,7 +66,7 @@
                       <!-- Was <a> - change back from <div> if not working on mobile -->
                       <div class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
                         <span v-if="isNew(item)" class="badge badge-info">New</span>
-                          {{ item.quantity}} {{ item.name }} {{ item.user }}
+                          {{ item.quantity }} {{ item.name }} <!-- {{ item.user }} -->
                       </div> 
                     </h5>
                   </div>
