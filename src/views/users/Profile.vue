@@ -122,7 +122,7 @@
                        <div class="item clearfix">
                          <div class="details">
                            <div class="name" >
-                            fhuneiqrvrgfhbveiruqlabvuerbvlnejbdfbvkalbueivibeaoerbuvujbavbj
+                            Have anyone one else you share list making with? Click below to have a shared list page with another member of Spotlist.
                            </div><br>
                            <button type="submit" class="btn-pill btn-pill-sm button-main float-right" data-toggle="modal" data-target="#householdCreateModal">Get Started</button>
                          </div>

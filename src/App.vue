@@ -55,10 +55,10 @@
           </div>
           <div class="col-md-4 newsletter">
             <div class="title">
-              Get awesome updates
+             <router-link to="/users/new">Get Spotlist</router-link>
             </div>
             <p>
-              Enter your email address for news and product launches in the Awesome Space.
+              Make lists alone or as team. Either way your lists will be spotless
             </p>
           </div>
         </div>
@@ -177,6 +177,10 @@
 
 .footer {
   margin-top: 0px;
+}
+
+.footer a {
+  color: #800080;
 }
 
 /*login/signup link*/

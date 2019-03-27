@@ -525,6 +525,11 @@ export default {
           console.log("Success!", response.data);
           $("#createItemModal").modal("hide");
           list.items.push(response.data);
+          this.newItemName = "";
+          this.newItemQuantity = "";
+          this.newItemNeedByDate = "";
+          this.newItemImageUrl = "";
+          this.newItemCouponUrl = "";
         })
         .catch(error => {
           this.errors = error.response.data.errors;
