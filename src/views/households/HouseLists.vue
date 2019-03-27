@@ -16,6 +16,7 @@
 
 
 <!-- Create List Button  -->
+ 
     <div class="tickets container">
       <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
         <p class="m-md-0">
@@ -27,9 +28,8 @@
         </p>
       </div>
     </div>
-
-    
  
+
 
     <!-- Card -->
     <div class="event-tickets">
@@ -47,7 +47,7 @@
                   Add Item
                 </button>                 
               </div>
-              <hr>
+
 
 
         <!-- Accordion -->
@@ -79,9 +79,11 @@
                        <div v-if="item.need_by_date">
                         <b>Need by: </b>{{ calendarDate(item.need_by_date) }}
                        </div><br>
-                       
-                      <p>{{ item.coupon_url}}</p>
 
+                       <!-- <div>
+                        {{ couponLink(item.coupon_url) }}                     
+                       </div>
+ -->
                       <div class="col-md-10 mt-3 pt-2">
                         <div class="view z-depth-1">
                           <img :src="item.image_url" alt="" class="img-fluid">
@@ -99,17 +101,59 @@
                 </div>
               </div><br>
                 <button class="btn-pill btn-pill-sm button-delete float-right" v-on:click="destroyList(list)">Delete List</button><br>
+              
 
+              
             </div>
           </div>
             
         </div>
       </div>
     </div>
-    
 
 
-   
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ItemInfo">
+      More Info (Item)
+    </button>
+
+
+
+    <div class="modal" id="ItemInfo">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id=exampleItemInfo>{{ item.first_name }}added this item.</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#listInfo">
+      More Info (List)
+    </button>
+
+
+
+    <div class="modal" id="listInfo">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id=exampleListInfo>{{ list.user }}created this list.</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 
 <!-- New List Modal -->
 <!--  <button type="button" class="btn-pill btn-pill-primary" data-toggle="modal" data-target="#createListModal">
@@ -311,9 +355,12 @@
   background-image: url(/images/unsplash/evie-calder-857249-unsplash.jpg);
 }
 
+/*page color*/
 .house-lists {
   background-color: #e2ecec;
 }
+
+/*card styling*/
 .event-tickets .ticket {
   background: #ffffff;
   border-style: solid;
@@ -324,16 +371,16 @@
   margin-bottom: 30px;
 }
 
+.event-tickets .ticket:hover {
+  margin-top: -15px;
+}
+
 .event-tickets h5 {
   margin-top: 15px; /*accordion card margin*/
 }
 
 .event-tickets .ticket-title {
-  color: #626567;
-}
-
-.tickets-container {
-  background: #ffffff;
+  color: #626567; /*text of list cards*/
 }
 
 /* Style the buttons that are used to open and close the accordion panel */
@@ -580,6 +627,10 @@ export default {
     justAdded: function(list) {
       return moment(list.created_at).isAfter(moment().subtract(10, "minutes"));
     }
+    // couponLink: function(coupon) {
+    //   console.log();
+    //   window.open("https://" + coupon.url);
+    // }
   }
 };
 </script>

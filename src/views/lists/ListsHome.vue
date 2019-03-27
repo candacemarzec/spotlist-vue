@@ -7,7 +7,7 @@
            <div class="row">
              <div class="col-12">
                <h1 class="display-3">
-                 <!-- {{ list.user }} -->'s Lists
+                  {{ }}'s Lists
                </h1>
              </div>
            </div>
@@ -314,12 +314,16 @@
   margin-bottom: 30px;
 }
 
+.event-tickets .ticket:hover {
+  margin-top: -15px;
+}
+
 .event-tickets h5 {
   margin-top: 25px; /*accordion card margin*/
 }
 
 .event-tickets .ticket-title {
-  color: #626567;
+  color: #626567; /*text of list cards*/
 }
 
 .tickets-container {
