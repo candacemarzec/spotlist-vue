@@ -7,7 +7,7 @@
            <div class="row">
              <div class="col-12">
                <h1 class="display-3">
-                  {{ }}'s Lists
+                  My Lists
                </h1>
              </div>
            </div>
@@ -75,7 +75,10 @@
                            <b>Need by: </b> {{ calendarDate(item.need_by_date) }}
                           </div><br>
 
-                           <p>{{ item.coupon_url }}</p>
+                           <div v-if="item.coupon_url">
+                            <a v-bind:href="item.coupon_url" target="_blank">Coupon</a>                  
+                           </div>
+
                          <div class="col-md-10 mt-3 pt-2">
                            <div class="view z-depth-1">
                              <img :src="item.image_url" alt="" class="img-fluid">
@@ -370,6 +373,11 @@
   color: #626567;
 }
 
+/*coupon link*/
+.card-body a[data-v-0a26df46] {
+  color: #800080;
+}
+
 /*Notes*/
 .note-footer {
   background: #ffffff;
@@ -458,6 +466,8 @@ export default {
           console.log("Success!", response.data);
           $("#createListModal").modal("hide");
           this.lists.push(response.data);
+          this.newListStoreName = "";
+          this.newListNotes = "";
         })
         .catch(error => {
           this.errors = error.response.data.errors;
@@ -479,6 +489,11 @@ export default {
           console.log("Success!", response.data);
           $("#updateListModal").modal("hide");
           this.list = response.data;
+          this.newItemName = "";
+          this.newItemQuantity = "";
+          this.newItemNeedByDate = "";
+          this.newItemImageUrl = "";
+          this.newItemCouponUrl = "";
         })
         .catch(error => {
           this.errors = error.response.data.errors;

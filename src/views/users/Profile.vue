@@ -39,7 +39,7 @@
 
         <!-- User with Household -->
 
-        <div v-if="user.household">
+        <div>
           <div id="checkout">
             <div class="container">
               <div class="row">
@@ -69,8 +69,8 @@
                 </div>
 
 
-                  <!-- Household Card -->
-                  <div class="col-md-6">
+                  <!-- User with Household Card-->
+                  <div class="col-md-6"  v-if="user.household">
                     <div id="checkout-cart-summary" class="clearfix float-right">
                      <div class="line-items">
                        <div class="item clearfix">
@@ -114,6 +114,25 @@
                     </div>
                   </div>
 
+
+                  <!-- User without Household Card -->
+                  <div class="col-md-6" v-else>
+                    <div id="checkout-cart-summary" class="clearfix">
+                     <div class="line-items">
+                       <div class="item clearfix">
+                         <div class="details">
+                           <div class="name" >
+                            fhuneiqrvrgfhbveiruqlabvuerbvlnejbdfbvkalbueivibeaoerbuvujbavbj
+                           </div><br>
+                           <button type="submit" class="btn-pill btn-pill-sm button-main float-right" data-toggle="modal" data-target="#householdCreateModal">Get Started</button>
+                         </div>
+                         
+                       </div>
+                     </div>
+                      
+                    </div>
+                  </div>
+
               </div>
             </div>
           </div>
@@ -121,61 +140,6 @@
 
 
 
-
-
-         <!-- User without Household -->
-          <div v-if="!user.household">
-            <div id="checkout">
-              <div class="container">
-                <div class="row">
-                  <div class="col-md-6">
-                    <section>
-                        <form v-on:submit.prevent="updateUser()">
-                          <div class="form-group">
-                            <label>First name</label>
-                            <input type="text" class="form-control" v-model="user.first_name">
-                          </div>
-                          <div class="form-group">
-                            <label>Last name</label>
-                            <input type="text" class="form-control" v-model="user.last_name">
-                          </div>
-                          <div class="form-group">
-                            <label>Email address</label>
-                            <input type="email" class="form-control" v-model="user.email">
-                          </div>
-                          <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" class="form-control" v-model="user.password">
-                          </div>
-                          <button type="submit" class="btn-pill button-main">Update My Info</button>
-                          <button class="btn-pill btn-pill-sm float-right button-delete" v-on:click="destroyUser()">Delete My Profile</button>
-                        </form>
-                    </section>
-                  </div>
-
-
-                    <!-- Create Household Card -->
-                    <div class="col-md-6">
-                      <div id="checkout-cart-summary" class="clearfix">
-                       <div class="line-items">
-                         <div class="item clearfix">
-                           <div class="details">
-                             <div class="name" >
-                              fhuneiqrvrgfhbveiruqlabvuerbvlnejbdfbvkalbueivibeaoerbuvujbavbj
-                             </div><br>
-                             <button type="submit" class="btn-pill btn-pill-sm button-main float-right" data-toggle="modal" data-target="#householdCreateModal">Get Started</button>
-                           </div>
-                           
-                         </div>
-                       </div>
-                        
-                      </div>
-                    </div>
-
-               </div>
-             </div>
-           </div>
-         </div>  
 
 
             
@@ -205,7 +169,7 @@
               </div>
               <div class="form-group">
                 <label>Add Member(s)</label>
-                <input v-model="newMemberEmail" type="email" class="form-control">
+                <input v-model="updateMemberEmail" type="email" class="form-control">
                  <small class="form-text text-muted">Please enter the new member's email</small>
               </div>
               <div class="form-action">
@@ -242,7 +206,7 @@
               </div>
               <div class="form-group">
                 <label>Add Member(s)</label>
-                <input type="email" class="form-control form-text text-muted">
+                <input v-model="newMemberEmail" type="email" class="form-control form-text text-muted">
                  <small class="form-text text-muted">Please enter the new member's email</small>
               </div>
               <div class="form-action">
@@ -266,7 +230,7 @@
 }
 /*Homepage link */
 .account-page .breadcrumb-item a {
-  color: #442f69;
+  color: #800080;
 }
 
 /*Padding above cards*/
@@ -275,7 +239,6 @@
 }
 
 /*Household Card*/
-
 .clearfix {
   background-color: #d8e0e46b;
   word-wrap: break-word;
@@ -331,8 +294,8 @@ export default {
   data: function() {
     return {
       user: {},
-      household: {},
       newHouseholdName: "",
+      updateMemberEmail: "",
       newMemberEmail: "",
       errors: []
     };
@@ -341,7 +304,6 @@ export default {
     axios.get("/api/users/me").then(response => {
       console.log(response.data);
       this.user = response.data;
-      this.household = response.data.household;
     });
   },
   methods: {
@@ -372,17 +334,19 @@ export default {
         this.$router.push("/");
       });
     },
-    // Household Methods
 
+    // Household Methods
     createHousehold: function() {
       var householdParams = {
         name: this.newHouseholdName
       };
+      if (this.newMemberEmail) {
+        householdParams.new_member_email = this.newMemberEmail;
+      }
       axios.post("/api/households", householdParams).then(response => {
-        this.household = response.data;
+        this.user.household = response.data;
         this.newHouseholdName = "";
         $("#householdCreateModal").modal("hide");
-        this.$router.push("/users/" + this.user.id);
       });
     },
 
@@ -390,11 +354,11 @@ export default {
       var householdParams = {
         name: this.user.household.name
       };
-      if (this.newMemberEmail) {
-        householdParams.new_member_email = this.newMemberEmail;
+      if (this.updateMemberEmail) {
+        householdParams.update_member_email = this.updateMemberEmail;
       }
       axios
-        .patch("/api/households/" + this.household.id, householdParams)
+        .patch("/api/households/" + this.user.household.id, householdParams)
         .then(response => {
           console.log("Success!", response.data);
           this.user.household = response.data;
@@ -407,10 +371,10 @@ export default {
     },
 
     destroyHousehold: function() {
-      axios.delete("/api/households/" + this.household.id).then(response => {
+      axios.delete("/api/households/" + this.user.household.id).then(response => {
         console.log("Success!", response.data);
+        this.user.household = "";
         $("#householdUpdateModal").modal("hide");
-        this.$router.push("/users/" + this.user.id);
       });
     }
   }

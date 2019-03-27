@@ -40,12 +40,15 @@
               <p class="ticket-title">
                 <span v-if="justAdded(list)" class="badge badge-info float-left">New</span>
                 <i class="icon-edit float-right" data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)"></i><br>
-                {{ list.store_name }} {{ list.user }} 
+                {{ list.store_name }}
               </p>
+
               <div class="text-center pb-4 mb-4">
                 <button type="button" class="btn-pill btn-pill-sm button-main" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
                   Add Item
-                </button>                 
+                </button><br>
+                <i  class="icon-document" data-toggle="modal" data-target="#listInfo" v-on:click="setCurrentList(list)">
+                </i>                
               </div>
 
 
@@ -64,7 +67,7 @@
                       <!-- Was <a> - change back from <div> if not working on mobile -->
                       <div class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
                         <span v-if="isNew(item)" class="badge badge-info">New</span>
-                          {{ item.quantity }} {{ item.name }} {{ item.first_name }}
+                          {{ item.quantity }} {{ item.name }} 
 
                       </div> 
                     </h5>
@@ -72,18 +75,22 @@
 
                   <div :id="'collapse' + item.id" class="collapse" role="tabpanel">
                     <div class="card-body">
+                      <span>
                        <button type="button" class="btn-pill btn-pill-sm button-edit-item float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
                         Edit
-                       </button><br>
+                       </button>
+                       <i class="icon-document" data-toggle="modal" data-target="#ItemInfo" v-on:click="setCurrentItem(item)">
+                       </i>
+                     </span><br>
 
                        <div v-if="item.need_by_date">
                         <b>Need by: </b>{{ calendarDate(item.need_by_date) }}
                        </div><br>
 
-                       <!-- <div>
-                        {{ couponLink(item.coupon_url) }}                     
+                       <div v-if="item.coupon_url">
+                        <a v-bind:href="item.coupon_url" target="_blank">Coupon</a>                  
                        </div>
- -->
+
                       <div class="col-md-10 mt-3 pt-2">
                         <div class="view z-depth-1">
                           <img :src="item.image_url" alt="" class="img-fluid">
@@ -112,18 +119,21 @@
     </div>
 
 
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ItemInfo">
-      More Info (Item)
-    </button>
 
+
+    <!-- Item Info Modal -->
+
+    <!-- Button trigger modal -->
+   <!--  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ItemInfo">
+      More Info
+    </button> -->
 
 
     <div class="modal" id="ItemInfo">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id=exampleItemInfo>{{ item.first_name }}added this item.</h5>
+            <h5 class="modal-title" id=exampleItemInfo>{{ household.user }} added this item.</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -133,18 +143,21 @@
     </div>
 
 
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#listInfo">
-      More Info (List)
-    </button>
 
+
+    <!-- List Info Modal-->
+
+    <!-- Button trigger modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#listInfo">
+      More Info (List)
+    </button> -->
 
 
     <div class="modal" id="listInfo">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id=exampleListInfo>{{ list.user }}created this list.</h5>
+            <h5 class="modal-title" id=exampleListInfo>{{ household.user }} created this list.</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -423,6 +436,11 @@
   color: #626567;
 }
 
+/*coupon link*/
+.card-body a[data-v-0a26df46] {
+  color: #800080;
+}
+
 /*Notes*/
 .note-footer {
   background: #ffffff;
@@ -530,6 +548,8 @@ export default {
           console.log("Success!", response.data);
           $("#createListModal").modal("hide");
           this.household.lists.push(response.data);
+          this.newListStoreName = "";
+          this.newListNotes = "";
         })
         .catch(error => {
           this.errors = error.response.data.errors;
@@ -582,6 +602,11 @@ export default {
           console.log("Success!", response.data);
           $("#createItemModal").modal("hide");
           list.items.push(response.data);
+          this.newItemName = "";
+          this.newItemQuantity = "";
+          this.newItemNeedByDate = "";
+          this.newItemImageUrl = "";
+          this.newItemCouponUrl = "";
         })
         .catch(error => {
           this.errors = error.response.data.errors;
@@ -627,10 +652,6 @@ export default {
     justAdded: function(list) {
       return moment(list.created_at).isAfter(moment().subtract(10, "minutes"));
     }
-    // couponLink: function(coupon) {
-    //   console.log();
-    //   window.open("https://" + coupon.url);
-    // }
   }
 };
 </script>

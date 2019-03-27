@@ -179,6 +179,11 @@
   margin-top: 0px;
 }
 
+/*login/signup link*/
+.ecommerce-sign-up-form .form-bottom a {
+  color: #800080;
+}
+
 .button-modal {
   background-color: #442f69;
 }
@@ -214,6 +219,12 @@ export default {
           axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.jwt;
           localStorage.setItem("jwt", response.data.jwt);
           console.log(response.data);
+          this.email = "";
+          this.password = "";
+          this.first_name = "";
+          this.last_name = "";
+          this.passwordConfirmation = "";
+
           $("#loginModal").modal("hide");
           this.$router.push("/users/me");
         })
@@ -235,6 +246,11 @@ export default {
         .post("/api/users", params)
         .then(response => {
           $("#signupModal").modal("hide");
+          this.email = "";
+          this.password = "";
+          this.first_name = "";
+          this.last_name = "";
+          this.passwordConfirmation = "";
           this.$router.push("/login");
         })
         .catch(error => {
