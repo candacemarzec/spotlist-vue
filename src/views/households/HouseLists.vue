@@ -47,9 +47,11 @@
                 <button type="button" class="btn-pill btn-pill-sm button-main" data-toggle="modal" data-target="#createItemModal" v-on:click="setCurrentList(list)">
                   Add Item
                 </button><br>
-                <i  class="icon-document" data-toggle="modal" data-target="#listInfo" v-on:click="setCurrentList(list)">
-                </i>                
+
+                <i class="icon-document" data-toggle="modal" data-target="#listInfo" v-on:click="setCurrentList(list)"></i>
+                                
               </div>
+
 
 
 
@@ -67,7 +69,7 @@
                       <!-- Was <a> - change back from <div> if not working on mobile -->
                       <div class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
                         <span v-if="isNew(item)" class="badge badge-info">New</span>
-                          {{ item.quantity }} {{ item.name }} 
+                          {{ item.quantity }}  {{ item.name }} 
 
                       </div> 
                     </h5>
@@ -79,8 +81,10 @@
                        <button type="button" class="btn-pill btn-pill-sm button-edit-item float-right" data-toggle="modal" data-target="#updateItemModal" v-on:click="setCurrentItem(item)">
                         Edit
                        </button>
+
                        <i class="icon-document" data-toggle="modal" data-target="#ItemInfo" v-on:click="setCurrentItem(item)">
                        </i>
+
                      </span><br>
 
                        <div v-if="item.need_by_date">
@@ -121,26 +125,6 @@
 
 
 
-    <!-- Item Info Modal -->
-
-    <!-- Button trigger modal -->
-   <!--  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ItemInfo">
-      More Info
-    </button> -->
-
-
-    <div class="modal" id="ItemInfo">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id=exampleItemInfo>{{ household.user }} added this item.</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
 
 
 
@@ -157,7 +141,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id=exampleListInfo>{{ household.user }} created this list.</h5>
+            <h5 class="modal-title" id=exampleListInfo>{{ currentList.user }} created this list.</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
@@ -165,6 +149,30 @@
         </div>
       </div>
     </div>
+
+
+
+
+    <!-- Item Info Modal -->
+
+    <!-- Button trigger modal -->
+   <!--  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ItemInfo">
+      More Info
+    </button> -->
+
+    <div class="modal" id="ItemInfo">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id=exampleItemInfo>{{ currentItem.user }} added this item.</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+   
 
 
 
@@ -558,6 +566,7 @@ export default {
     },
     setCurrentList: function(list) {
       this.currentList = list;
+      console.log(list);
     },
     updateList: function(list) {
       console.log(list);
@@ -613,7 +622,6 @@ export default {
           this.status = error.response.status;
         });
     },
-
     setCurrentItem: function(item) {
       this.currentItem = item;
     },

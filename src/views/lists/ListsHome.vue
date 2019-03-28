@@ -34,7 +34,7 @@
              <div v-for="list in lists" class="col-md-4">
                <div class="ticket">
                  <p class="ticket-title">
-                  <span v-if="justAdded(list)" class="badge badge-info float-left">New</span> 
+                  <!-- <span v-if="justAdded(list)" class="badge badge-info float-left">New</span>  -->
                    <i class="icon-edit float-right" data-toggle="modal" data-target="#updateListModal" v-on:click="setCurrentList(list)"></i><br>
                    {{ list.store_name }}
                  </p>
@@ -59,7 +59,7 @@
                          </div>
                          <!-- Was <a> - change back from <div> if not working on mobile -->
                          <div class="collapsed" data-toggle="collapse" data-parent="#accordion" :href="'#collapse' + item.id">
-                          <span v-if="isNew(item)" class="badge badge-info">New</span>
+                          <!-- <span v-if="isNew(item)" class="badge badge-info">New</span> -->
                             {{ item.quantity }} {{ item.name }}
                          </div> 
                        </h5>
@@ -570,10 +570,10 @@ export default {
     },
     isNew: function(item) {
       return moment(item.created_at).isAfter(moment().subtract(10, "minutes"));
-    },
-    justAdded: function(list) {
-      return moment(list.created_at).isAfter(moment().subtract(10, "minutes"));
     }
+    // justAdded: function(list) {
+    //   return moment(list.created_at).isAfter(moment().subtract(10, "minutes"));
+    // }
   }
 };
 </script>

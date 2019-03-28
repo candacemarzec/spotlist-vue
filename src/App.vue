@@ -58,7 +58,7 @@
              <router-link to="/users/new">Get Spotlist</router-link>
             </div>
             <p>
-              Make lists alone or as team. Either way your lists will be spotless
+              Make lists alone or as team. Either way your lists will be spotless.
             </p>
           </div>
         </div>
@@ -259,9 +259,10 @@ export default {
         })
         .catch(error => {
           this.errors = error.response.data.errors;
-          // this.errors = ["Invalid email or password."];
-          // this.email = "";
-          // this.password = "";
+          this.errors = ["Invalid email or password."];
+          this.email = "";
+          this.password = "";
+          this.passwordConfirmation = "";
         });
     }
   }

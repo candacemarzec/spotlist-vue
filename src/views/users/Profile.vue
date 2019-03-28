@@ -23,7 +23,7 @@
 
 
 
-                    <!-- Tab panes -->
+          <!-- Tab panes -->
           <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="profile">
               <div class="row profile-form">
@@ -38,7 +38,6 @@
 
 
         <!-- User with Household -->
-
         <div>
           <div id="checkout">
             <div class="container">
@@ -58,10 +57,10 @@
                           <label>Email address</label>
                           <input type="email" class="form-control" v-model="user.email">
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                           <label>Password</label>
                           <input type="password" class="form-control" v-model="user.password">
-                        </div>
+                        </div> -->
                         <button type="submit" class="btn-pill button-main">Update My Info</button>
                         <button class="btn-pill btn-pill-sm float-right button-delete" v-on:click="destroyUser()">Delete My Profile</button>
                       </form>
@@ -311,8 +310,8 @@ export default {
       var userParams = {
         first_name: this.user.first_name,
         last_name: this.user.last_name,
-        email: this.user.email,
-        password: this.user.password
+        email: this.user.email
+        // password: this.user.password
       };
 
       axios
