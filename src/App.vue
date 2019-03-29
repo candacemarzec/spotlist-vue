@@ -12,10 +12,10 @@
           <ul class="navbar-nav">
 
             <li class="nav-item" v-if="!isLoggedIn()" data-toggle="modal" data-target="#loginModal">
-              <a class="nav-link">Login</a>
+              <router-link class="nav-link" to="/">Login</router-link>
             </li>
             <li class="nav-item" v-if="!isLoggedIn()" data-toggle="modal" data-target="#signupModal">
-              <a class="nav-link nav-link--rounded">Signup</a>
+              <router-link class="nav-link nav-link--rounded" to="/">Signup</router-link>
             </li>
 
             <li class="nav-item" v-if="isLoggedIn()">
@@ -58,7 +58,7 @@
              <router-link to="/users/new">Get Spotlist</router-link>
             </div>
             <p>
-              Make lists alone or as team. Either way your lists will be spotless
+              Make lists alone or as a team. Either way your lists will be spotless.
             </p>
           </div>
         </div>

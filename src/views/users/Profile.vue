@@ -79,7 +79,7 @@
                             <h3>My Household Info</h3> 
                            </div>
                          </div>
-                         <i data-toggle="modal" data-target="#householdUpdateModal" class="icon-edit float-right"></i>
+                         <i class="icon-edit float-right" data-toggle="modal" data-target="#householdUpdateModal" v-on:click="updateHousehold()"></i>
                        </div>
                      </div>
 
@@ -122,7 +122,7 @@
                        <div class="item clearfix">
                          <div class="details">
                            <div class="name" >
-                            Have anyone one else you share list making with? Click below to have a shared list page with another member of Spotlist.
+                            Have anyone else you share list making with? Click below to have a shared list page with other members of Spotlist.
                            </div><br>
                            <button type="submit" class="btn-pill btn-pill-sm button-main float-right" data-toggle="modal" data-target="#householdCreateModal">Get Started</button>
                          </div>
